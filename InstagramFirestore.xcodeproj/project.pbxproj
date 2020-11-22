@@ -9,21 +9,35 @@
 /* Begin PBXBuildFile section */
 		2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608BE2568EE100007C579 /* AppDelegate.swift */; };
 		2B7608C12568EE100007C579 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608C02568EE100007C579 /* SceneDelegate.swift */; };
-		2B7608C32568EE100007C579 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608C22568EE100007C579 /* ViewController.swift */; };
-		2B7608C62568EE100007C579 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B7608C42568EE100007C579 /* Main.storyboard */; };
 		2B7608C82568EE140007C579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B7608C72568EE140007C579 /* Assets.xcassets */; };
 		2B7608CB2568EE140007C579 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B7608C92568EE140007C579 /* LaunchScreen.storyboard */; };
+		2B7608DC2568EF050007C579 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608DB2568EF050007C579 /* MainTabController.swift */; };
+		2B7608E02568F25A0007C579 /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608DF2568F25A0007C579 /* FeedController.swift */; };
+		2B7608E32568F26B0007C579 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608E22568F26B0007C579 /* SearchController.swift */; };
+		2B7608E62568F27D0007C579 /* ImageSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608E52568F27D0007C579 /* ImageSelectorController.swift */; };
+		2B7608E92568F2970007C579 /* NotificationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608E82568F2970007C579 /* NotificationsController.swift */; };
+		2B7608EC2568F2A30007C579 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608EB2568F2A30007C579 /* ProfileController.swift */; };
+		2B7608F2256949200007C579 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608F1256949200007C579 /* CustomTabBar.swift */; };
+		2B7608F5256963B30007C579 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608F4256963B30007C579 /* FeedCell.swift */; };
+		2B7608F8256964720007C579 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608F7256964720007C579 /* UIView + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2B7608BB2568EE100007C579 /* InstagramFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B7608BE2568EE100007C579 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B7608C02568EE100007C579 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2B7608C22568EE100007C579 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2B7608C52568EE100007C579 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2B7608C72568EE140007C579 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B7608CA2568EE140007C579 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2B7608CC2568EE140007C579 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B7608DB2568EF050007C579 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
+		2B7608DF2568F25A0007C579 /* FeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
+		2B7608E22568F26B0007C579 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
+		2B7608E52568F27D0007C579 /* ImageSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectorController.swift; sourceTree = "<group>"; };
+		2B7608E82568F2970007C579 /* NotificationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsController.swift; sourceTree = "<group>"; };
+		2B7608EB2568F2A30007C579 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
+		2B7608F1256949200007C579 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		2B7608F4256963B30007C579 /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
+		2B7608F7256964720007C579 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +70,70 @@
 		2B7608BD2568EE100007C579 /* InstagramFirestore */ = {
 			isa = PBXGroup;
 			children = (
+				2B7608DA2568EE870007C579 /* Model */,
+				2B7608D92568EE850007C579 /* View */,
+				2B7608D82568EE820007C579 /* View Model */,
+				2B7608D72568EE740007C579 /* Controller */,
+				2B7608D62568EE720007C579 /* API */,
+				2B7608D32568EE5B0007C579 /* Utils */,
 				2B7608BE2568EE100007C579 /* AppDelegate.swift */,
 				2B7608C02568EE100007C579 /* SceneDelegate.swift */,
-				2B7608C22568EE100007C579 /* ViewController.swift */,
-				2B7608C42568EE100007C579 /* Main.storyboard */,
 				2B7608C72568EE140007C579 /* Assets.xcassets */,
 				2B7608C92568EE140007C579 /* LaunchScreen.storyboard */,
 				2B7608CC2568EE140007C579 /* Info.plist */,
 			);
 			path = InstagramFirestore;
+			sourceTree = "<group>";
+		};
+		2B7608D32568EE5B0007C579 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2B7608F1256949200007C579 /* CustomTabBar.swift */,
+				2B7608F7256964720007C579 /* UIView + Extension.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		2B7608D62568EE720007C579 /* API */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		2B7608D72568EE740007C579 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				2B7608DB2568EF050007C579 /* MainTabController.swift */,
+				2B7608DF2568F25A0007C579 /* FeedController.swift */,
+				2B7608E22568F26B0007C579 /* SearchController.swift */,
+				2B7608E52568F27D0007C579 /* ImageSelectorController.swift */,
+				2B7608E82568F2970007C579 /* NotificationsController.swift */,
+				2B7608EB2568F2A30007C579 /* ProfileController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		2B7608D82568EE820007C579 /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "View Model";
+			sourceTree = "<group>";
+		};
+		2B7608D92568EE850007C579 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2B7608F4256963B30007C579 /* FeedCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2B7608DA2568EE870007C579 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,7 +195,6 @@
 			files = (
 				2B7608CB2568EE140007C579 /* LaunchScreen.storyboard in Resources */,
 				2B7608C82568EE140007C579 /* Assets.xcassets in Resources */,
-				2B7608C62568EE100007C579 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +205,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B7608C32568EE100007C579 /* ViewController.swift in Sources */,
+				2B7608E62568F27D0007C579 /* ImageSelectorController.swift in Sources */,
+				2B7608F5256963B30007C579 /* FeedCell.swift in Sources */,
+				2B7608E32568F26B0007C579 /* SearchController.swift in Sources */,
 				2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */,
+				2B7608E02568F25A0007C579 /* FeedController.swift in Sources */,
+				2B7608F2256949200007C579 /* CustomTabBar.swift in Sources */,
+				2B7608EC2568F2A30007C579 /* ProfileController.swift in Sources */,
+				2B7608DC2568EF050007C579 /* MainTabController.swift in Sources */,
+				2B7608E92568F2970007C579 /* NotificationsController.swift in Sources */,
+				2B7608F8256964720007C579 /* UIView + Extension.swift in Sources */,
 				2B7608C12568EE100007C579 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,14 +222,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		2B7608C42568EE100007C579 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2B7608C52568EE100007C579 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2B7608C92568EE140007C579 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
