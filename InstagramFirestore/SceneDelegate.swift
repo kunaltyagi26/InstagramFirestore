@@ -6,23 +6,16 @@
 //
 
 import UIKit
+import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        
-        //let mainTabController = MainTabController()
-        let loginController = LoginController()
-        let loginNavigationController = UINavigationController(rootViewController: loginController)
-        window.rootViewController = loginNavigationController
-        
-        self.window = window
-        window.makeKeyAndVisible()
+        setRootViewController(window: window)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -53,6 +46,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    func setRootViewController(window: UIWindow) {
+        if Auth.auth().currentUser == nil {
+            let loginController = LoginController()
+            let loginNavigationController = UINavigationController(rootViewController: loginController)
+            
+            window.rootViewController = loginNavigationController
+            self.window = window
+            window.makeKeyAndVisible()
+        } else {
+            let mainTabController = MainTabController()
 
+            window.rootViewController = mainTabController
+            self.window = window
+            window.makeKeyAndVisible()
+            
+            guard let activityIndicator = window.rootViewController?.showActivityIndicator() else { return }
+            Auth.auth().currentUser?.reload(completion: { (error) in
+                if error != nil {
+                    window.rootViewController?.showFinalizedActivityIndicator(for: activityIndicator, withError: error?.localizedDescription)
+                    activityIndicator.perform {
+                        do {
+                            try Auth.auth().signOut()
+                        } catch {
+                            
+                        }
+                        self.setRootViewController(window: window)
+                    }
+                }
+            })
+        }
+    }
 }
 

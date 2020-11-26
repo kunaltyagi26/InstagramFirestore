@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum LoginError: Error {
+    case noInternetConnection
+    case invalidEmail
+    case invalidPassword
+}
+
 class LoginController: UIViewController {
     
     // MARK: - Properties
@@ -74,8 +80,8 @@ class LoginController: UIViewController {
         navigationController?.navigationBar.barStyle = .black
         
         let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemBlue.cgColor, UIColor.systemPurple.cgColor]
-        gradient.locations = [0, 0.5]
+        gradient.colors = [UIColor.systemIndigo.cgColor, UIColor.systemPurple.cgColor, UIColor.systemRed.cgColor]
+        gradient.locations = [0, 0.4, 0.8]
         view.layer.addSublayer(gradient)
         gradient.frame = view.frame
         
@@ -94,7 +100,7 @@ class LoginController: UIViewController {
         forgotPasswordButton.anchor(top: loginButton.bottomAnchor, paddingTop: 12)
         
         view.addSubview(signUpButton)
-        signUpButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor)
+        signUpButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 12)
         signUpButton.centerX(inView: view)
     }
     
@@ -116,8 +122,10 @@ class LoginController: UIViewController {
     // MARK: - Actions
     
     @objc func didTapSignUp() {
-        let registrationVC = RegistrationController()
-        self.navigationController?.pushViewController(registrationVC, animated: true)
+        DispatchQueue.main.async {
+            let registrationVC = RegistrationController()
+            self.navigationController?.pushViewController(registrationVC, animated: true)
+        }
     }
     
     @objc func textDidChange(sender: UITextField) {

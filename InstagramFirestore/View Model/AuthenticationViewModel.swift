@@ -38,7 +38,9 @@ struct LoginViewModel: AuthenticationViewModel {
             let emailValue = email.trimmingCharacters(in: .whitespacesAndNewlines)
             let passwordValue = password.trimmingCharacters(in: .whitespacesAndNewlines)
             if emailValue != "" && passwordValue != "" {
-                
+                AuthService().signIn(withEmail: emailValue, andPassword: passwordValue) { (credentials) in
+                    
+                }
             }
         }
     }
@@ -49,9 +51,10 @@ struct RegistrationViewModel: AuthenticationViewModel {
     var password: String?
     var fullName: String?
     var userName: String?
+    var profilePicture: UIImage?
     
     var isFormValid: Bool {
-        return email?.isEmpty == false && password?.isEmpty == false && fullName?.isEmpty == false && userName?.isEmpty == false
+        return email?.isEmpty == false && password?.isEmpty == false && fullName?.isEmpty == false && userName?.isEmpty == false && profilePicture != nil
     }
     
     var buttonBackgroundColor: UIColor {
@@ -62,13 +65,37 @@ struct RegistrationViewModel: AuthenticationViewModel {
         return isFormValid ? UIColor.systemBackground.withAlphaComponent(0.7) : UIColor.systemBackground.withAlphaComponent(0.4)
     }
     
-    func signUp() {
-        if let email = email, let password = password {
+    func signUp(completion: @escaping (Result<Bool, Error>)-> Void) {
+        if let email = email, let password = password, let fullName = fullName, let userName = userName, let profilePicture = profilePicture {
             let emailValue = email.trimmingCharacters(in: .whitespacesAndNewlines)
             let passwordValue = password.trimmingCharacters(in: .whitespacesAndNewlines)
-            if emailValue != "" && passwordValue != "" {
-                
+            let fullNameValue = fullName.trimmingCharacters(in: .whitespacesAndNewlines)
+            let usernameValue = userName.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if Reachability.isConnectedToNetwork(){
+                if emailValue == "" {
+                    completion(.failure(SignUpError.invalidEmail))
+                } else if passwordValue == "" {
+                    completion(.failure(SignUpError.invalidPassword))
+                } else if fullNameValue == "" {
+                    completion(.failure(SignUpError.invalidFullName))
+                } else if usernameValue == "" {
+                    completion(.failure(SignUpError.invalidUsername))
+                } else {
+                    AuthService().register(withCredential: AuthCredentails(email: emailValue, password: passwordValue, fullName: fullNameValue, userName: usernameValue, profileImage: profilePicture)) { (result) in
+                        switch result {
+                            case .success(let success):
+                                completion(.success(success))
+                            case .failure(let error):
+                                completion(.failure(error))
+                        }
+                    }
+                }
+            }else{
+                completion(.failure(SignUpError.noInternetConnection))
             }
+        } else {
+            completion(.failure(SignUpError.incompleteForm))
         }
     }
 }
