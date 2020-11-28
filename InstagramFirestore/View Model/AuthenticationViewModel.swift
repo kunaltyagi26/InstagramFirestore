@@ -33,14 +33,27 @@ struct LoginViewModel: AuthenticationViewModel {
         return isFormValid ? UIColor.systemBackground.withAlphaComponent(0.7) : UIColor.systemBackground.withAlphaComponent(0.4)
     }
     
-    func login() {
+    func login(completion: @escaping (Result<Bool, Error>)-> Void) {
         if let email = email, let password = password {
             let emailValue = email.trimmingCharacters(in: .whitespacesAndNewlines)
             let passwordValue = password.trimmingCharacters(in: .whitespacesAndNewlines)
-            if emailValue != "" && passwordValue != "" {
-                AuthService().signIn(withEmail: emailValue, andPassword: passwordValue) { (credentials) in
-                    
+            if Reachability.isConnectedToNetwork(){
+                if emailValue == "" {
+                    completion(.failure(SignUpError.invalidEmail))
+                } else if passwordValue == "" {
+                    completion(.failure(SignUpError.invalidPassword))
+                } else {
+                    AuthService().signIn(withEmail: emailValue, andPassword: passwordValue) { (result) in
+                        switch result {
+                            case .success(let success):
+                                completion(.success(success))
+                            case .failure(let error):
+                                completion(.failure(error))
+                        }
+                    }
                 }
+            } else{
+                completion(.failure(SignUpError.noInternetConnection))
             }
         }
     }

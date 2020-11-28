@@ -18,10 +18,13 @@ struct AuthCredentails {
 }
 
 struct AuthService {
-    func signIn(withEmail email: String, andPassword password: String, completion: @escaping(AuthCredentails)-> Void) {
+    func signIn(withEmail email: String, andPassword password: String, completion: @escaping(Result<Bool, Error>)-> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            print(authResult?.user)
-            print(error)
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(true))
+            }
         }
     }
     
@@ -35,6 +38,11 @@ struct AuthService {
                 completion(.failure(error))
                 return
             } else {
+                guard let downloadUrl = downloadUrl, let fullName = credentials.fullName, let userName = credentials.userName else {
+                    completion(.failure(SignUpError.incompleteForm))
+                    return
+                }
+                
                 Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { authResult, error in
                     if let error = error {
                         completion(.failure(error))
@@ -44,10 +52,10 @@ struct AuthService {
                     guard let uid = authResult?.user.uid else { return }
                     
                     let data: [String: Any] = ["email": credentials.email,
-                                               "fullName": credentials.fullName,
+                                               "fullName": fullName,
                                                "profileImageUrl": downloadUrl,
                                                "uid": uid,
-                                               "username": credentials.userName]
+                                               "username": userName]
                     
                     Firestore.firestore().collection("users").document(uid).setData(data)
             
@@ -57,16 +65,27 @@ struct AuthService {
                             completion(.failure(error))
                             return
                         } else {
-                            do {
-                                try Auth.auth().signOut()
-                                completion(.success(true))
-                            } catch {
-                                completion(.failure(error))
+                            signOut { (result) in
+                                switch result {
+                                    case .success(let success):
+                                        completion(.success(success))
+                                    case .failure(let error):
+                                        completion(.failure(error))
+                                }
                             }
                         }
                     }
                 }
             }
         })
+    }
+    
+    func signOut(completion: @escaping (Result<Bool, Error>)-> Void) {
+        do {
+            try Auth.auth().signOut()
+            completion(.success(true))
+        } catch {
+            completion(.failure(error))
+        }
     }
 }

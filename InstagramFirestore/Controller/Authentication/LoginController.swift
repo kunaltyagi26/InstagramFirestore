@@ -139,7 +139,25 @@ class LoginController: UIViewController {
     }
     
     @objc func didTapLogin() {
+        let activityIndicator = self.showActivityIndicator()
         
+        viewModel.login { (result) in
+            switch result {
+                case .success(_):
+                    self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: "Success", andTime: 0.5)
+                    activityIndicator.perform {
+                        DispatchQueue.main.async {
+                            let mainTabController = MainTabController()
+                            mainTabController.modalPresentationStyle = .fullScreen
+                            self.present(mainTabController, animated: true, completion: nil)
+                        }
+                    }
+                    
+                case .failure(let error):
+                    let errorMessage = self.mapError(error)
+                    self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: errorMessage)
+            }
+        }
     }
 }
 

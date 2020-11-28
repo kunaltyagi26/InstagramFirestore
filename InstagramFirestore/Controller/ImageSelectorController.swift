@@ -16,6 +16,7 @@ class ImageSelectorController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Select Image"
         self.view.backgroundColor = .systemBackground
+        self.showLogoutButton()
     }
     
     // MARK: - Helpers

@@ -11,7 +11,13 @@ class FeedCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    private let profileImageview: UIImageView = {
+    private let outerProfileImageView: UIView = {
+        let outerView = UIView()
+        outerView.applyshadowWithCorner(cornerRadius: 40 / 2, shadowRadius: 3, shadowOffset: CGSize(width: 3.0, height: 3.0), shadowOpacity: 1.0)
+        return outerView
+    }()
+    
+    private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
@@ -38,10 +44,17 @@ class FeedCell: UICollectionViewCell {
         return button
     }()
     
+    private let outerPostImageView: UIView = {
+        let outerView = UIView()
+        outerView.applyshadowWithCorner(cornerRadius: 20, shadowRadius: 10, shadowOffset: CGSize(width: 5.0, height: 5.0), shadowOpacity: 1.0)
+        return outerView
+    }()
+    
     private let postImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
+        iv.layer.cornerRadius = 20
         iv.isUserInteractionEnabled = true
         iv.image = #imageLiteral(resourceName: "venom-7")
         return iv
@@ -139,21 +152,30 @@ class FeedCell: UICollectionViewCell {
     // MARK: - Helpers
     
     func setupView() {
-        backgroundColor = .systemBackground
+        backgroundColor = UIColor(named: "background")
+        layer.cornerRadius = 30
+        self.applyshadowWithCorner(cornerRadius: 30, shadowRadius: 5, shadowOffset: CGSize(width: 5.0, height: 5.0), shadowOpacity: 0.5)
         
-        addSubview(profileImageview)
-        profileImageview.anchor(top: topAnchor, left: leftAnchor, paddingTop: 12, paddingLeft: 12, width: 40, height: 40)
+        addSubview(outerProfileImageView)
+        outerProfileImageView.anchor(top: topAnchor, left: leftAnchor, paddingTop: 12, paddingLeft: 12, width: 40, height: 40)
+        
+        outerProfileImageView.addSubview(profileImageView)
+        profileImageView.anchor(top: outerProfileImageView.topAnchor, left: outerProfileImageView.leftAnchor, bottom: outerProfileImageView.bottomAnchor, right: outerProfileImageView.rightAnchor)
         
         addSubview(usernameButton)
-        usernameButton.centerY(inView: profileImageview, leftAnchor: profileImageview.rightAnchor, paddingLeft: 8)
+        usernameButton.centerY(inView: outerProfileImageView, leftAnchor: outerProfileImageView.rightAnchor, paddingLeft: 8)
         
         addSubview(optionsButton)
-        optionsButton.centerY(inView: profileImageview)
+        optionsButton.centerY(inView: outerProfileImageView)
         optionsButton.anchor(right: rightAnchor, paddingRight: 12)
         
-        addSubview(postImageView)
-        postImageView.anchor(top: profileImageview.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 12)
-        postImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
+        addSubview(outerPostImageView)
+        outerPostImageView.anchor(top: outerProfileImageView.bottomAnchor, left: leftAnchor
+                             , right: rightAnchor, paddingTop: 12, paddingLeft: 12, paddingRight: 12)
+        outerPostImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
+        
+        outerPostImageView.addSubview(postImageView)
+        postImageView.anchor(top: outerPostImageView.topAnchor, left: outerPostImageView.leftAnchor, bottom: outerPostImageView.bottomAnchor, right: outerPostImageView.rightAnchor)
         
         configureActionButtons()
         
@@ -178,6 +200,6 @@ class FeedCell: UICollectionViewCell {
         stackView.spacing = 16
         
         addSubview(stackView)
-        stackView.anchor(top: postImageView.bottomAnchor, left: leftAnchor, paddingTop: 12, paddingLeft: 12)
+        stackView.anchor(top: outerPostImageView.bottomAnchor, left: leftAnchor, paddingTop: 24, paddingLeft: 12)
     }
 }

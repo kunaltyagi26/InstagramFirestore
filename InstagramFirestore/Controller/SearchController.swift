@@ -16,6 +16,7 @@ class SearchController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Search"
         self.view.backgroundColor = .systemBackground
+        self.showLogoutButton()
     }
     
     // MARK: - Helpers

@@ -94,5 +94,26 @@ extension UIView {
         anchor(top: view.topAnchor, left: view.leftAnchor,
                bottom: view.bottomAnchor, right: view.rightAnchor)
     }
+    
+    func applyshadowWithCorner(cornerRadius : CGFloat, shadowRadius: CGFloat, shadowOffset: CGSize, shadowOpacity: Float){
+        self.layer.backgroundColor = UIColor(named: "background")?.cgColor
+        self.layer.cornerRadius = cornerRadius
+        self.layer.masksToBounds = false
+        self.layer.shadowOpacity = shadowOpacity
+        self.layer.shadowRadius = shadowRadius
+        self.layer.shadowOffset = shadowOffset
+        self.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
+        
+        /*let shadowLayer = CAShapeLayer()
+        shadowLayer.frame = self.bounds
+        shadowLayer.backgroundColor = UIColor(named: "background")?.cgColor
+        shadowLayer.shadowColor = UIColor.black.withAlphaComponent(0.9).cgColor
+        shadowLayer.cornerRadius = cornerRadius
+        shadowLayer.shadowOffset = CGSize(width: -5.0, height: -5.0)
+        shadowLayer.shadowOpacity = 1
+        shadowLayer.shadowRadius = 15
+        
+        self.layer.insertSublayer(shadowLayer, at: 0)*/
+    }
 }
 

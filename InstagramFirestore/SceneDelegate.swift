@@ -48,6 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func setRootViewController(window: UIWindow) {
         if Auth.auth().currentUser == nil {
+            //let mainTabController = MainTabController()
             let loginController = LoginController()
             let loginNavigationController = UINavigationController(rootViewController: loginController)
             
@@ -73,6 +74,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                         self.setRootViewController(window: window)
                     }
+                } else {
+                    window.rootViewController?.showFinalizedActivityIndicator(for: activityIndicator, andTime: 0.0)
                 }
             })
         }

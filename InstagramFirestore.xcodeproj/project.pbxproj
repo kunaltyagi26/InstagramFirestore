@@ -31,6 +31,7 @@
 		2B76093E256CEDA10007C579 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B76093D256CEDA10007C579 /* ImageUploader.swift */; };
 		2B760941256FDF200007C579 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B760940256FDF1F0007C579 /* Reachability.swift */; };
 		2B760964256FE44B0007C579 /* UIViewController + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */; };
+		2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */; };
 		B06BB9ED342EFC910E0B0201 /* Pods_InstagramFirestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E02C8EC01C7DFA6BC3C6F6AF /* Pods_InstagramFirestore.framework */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		2B76093D256CEDA10007C579 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		2B760940256FDF1F0007C579 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extensions.swift"; sourceTree = "<group>"; };
+		2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthErrorCode + Extensions.swift"; sourceTree = "<group>"; };
 		9E95E6B22A1A80FCEF0FC0B2 /* Pods-InstagramFirestore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstagramFirestore.release.xcconfig"; path = "Target Support Files/Pods-InstagramFirestore/Pods-InstagramFirestore.release.xcconfig"; sourceTree = "<group>"; };
 		E02C8EC01C7DFA6BC3C6F6AF /* Pods_InstagramFirestore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InstagramFirestore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -124,6 +126,7 @@
 				2B76090A256A703F0007C579 /* UIButton + Extensions.swift */,
 				2B760940256FDF1F0007C579 /* Reachability.swift */,
 				2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */,
+				2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */,
 				2B7608E62568F27D0007C579 /* ImageSelectorController.swift in Sources */,
 				2B760903256A44990007C579 /* UITextField + Extensions.swift in Sources */,
 				2B7608FD256A39820007C579 /* LoginController.swift in Sources */,

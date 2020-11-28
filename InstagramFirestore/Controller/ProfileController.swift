@@ -16,6 +16,7 @@ class ProfileController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Profile"
         self.view.backgroundColor = .systemBackground
+        self.showLogoutButton()
     }
     
     // MARK: - Helpers

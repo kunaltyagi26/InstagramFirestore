@@ -24,27 +24,6 @@ enum SignUpError: Error {
     case incompleteForm
 }
 
-extension Error {
-    func mapError(error: Error)-> String {
-        var errorMessage = ""
-        switch error {
-            case SignUpError.noInternetConnection:
-                errorMessage = "The request cannot be processed as internet connection is not available."
-            case SignUpError.invalidEmail:
-                errorMessage = "Please enter a valid email address."
-            case SignUpError.invalidPassword:
-                errorMessage = "Please enter a valid password."
-            case SignUpError.invalidFullName:
-                errorMessage = "Please enter a valid full name."
-            case SignUpError.invalidUsername:
-                errorMessage = "Please enter a valid email address."
-            default:
-                errorMessage = "Unkown error."
-        }
-        return errorMessage
-    }
-}
-
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
@@ -264,7 +243,8 @@ class RegistrationController: UIViewController {
                     }
                     
                 case .failure(let error):
-                    self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: error.localizedDescription)
+                    let errorMessage = self.mapError(error)
+                    self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: errorMessage)
             }
         }
     }

@@ -44,6 +44,7 @@ class MainTabController: UITabBarController {
         self.selectedIndex = 0
         addSwipeFeature()
         self.tabBar.tintColor = .label
+        self.tabBar.barTintColor = UIColor(named: "background")
     }
     
     func templateNavigationController(unselectedImage: String, selectedImage: String, rootViewController: UIViewController)-> UINavigationController {
@@ -53,6 +54,9 @@ class MainTabController: UITabBarController {
         } else {
             navigationController.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: unselectedImage), selectedImage: UIImage(systemName: selectedImage))
         }
+        navigationController.navigationBar.tintColor = .label
+        navigationController.navigationBar.barTintColor = UIColor(named: "background")
+        
         return navigationController
     }
     

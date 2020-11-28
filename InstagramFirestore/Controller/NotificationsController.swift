@@ -16,6 +16,7 @@ class NotificationsController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Notifications"
         self.view.backgroundColor = .systemBackground
+        self.showLogoutButton()
     }
     
     // MARK: - Helpers

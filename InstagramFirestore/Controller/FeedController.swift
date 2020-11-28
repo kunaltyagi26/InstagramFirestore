@@ -21,10 +21,12 @@ class FeedController: UICollectionViewController {
     
     func configureCollectionView() {
         self.navigationItem.title = "Feed"
-        self.view.backgroundColor = .systemBackground
-        self.collectionView.backgroundColor = .systemBackground
+        self.view.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
+        self.collectionView.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
+        self.showLogoutButton()
         
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: resuseIdentifier)
+        collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
     }
     
     // MARK: - Helpers
@@ -39,6 +41,7 @@ extension FeedController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: resuseIdentifier, for: indexPath) as? FeedCell else { return UICollectionViewCell() }
+        
         return cell
     }
 }
@@ -48,7 +51,11 @@ extension FeedController {
 extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.frame.width
-        let height = 12 + 40 + 12 + width + 12 + 20 + 12 + 15 + 12 + 15 + 12 + 15 + 12
-        return CGSize(width: view.frame.width, height: height)
+        let height = 12 + 40 + 12 + width + 24 + 20 + 12 + 15 + 12 + 15 + 12 + 15 + 12
+        return CGSize(width: view.frame.width - 24, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 24.0
     }
 }
