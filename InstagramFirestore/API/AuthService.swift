@@ -57,7 +57,7 @@ struct AuthService {
                                                "uid": uid,
                                                "username": userName]
                     
-                    Firestore.firestore().collection("users").document(uid).setData(data)
+                    usersCollection.document(uid).setData(data)
             
                     Auth.auth().useAppLanguage()
                     Auth.auth().currentUser?.sendEmailVerification { (error) in

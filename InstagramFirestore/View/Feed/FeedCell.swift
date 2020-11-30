@@ -36,7 +36,7 @@ class FeedCell: UICollectionViewCell {
         return button
     }()
     
-    private let optionsButton: UIButton = {
+    private lazy var optionsButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         button.tintColor = .label

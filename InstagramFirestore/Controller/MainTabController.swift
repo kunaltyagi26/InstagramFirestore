@@ -36,7 +36,8 @@ class MainTabController: UITabBarController {
         let notificationsController = NotificationsController()
         let notificationsNavigationController = templateNavigationController(unselectedImage: "heart", selectedImage: "heart.fill", rootViewController: notificationsController)
                 
-        let profileController = ProfileController()
+        let profileLayout = UICollectionViewFlowLayout()
+        let profileController = ProfileController(collectionViewLayout: profileLayout)
         let profileNavigationController = templateNavigationController(unselectedImage: "person", selectedImage: "person.fill", rootViewController: profileController)
         
         self.viewControllers = [feedNavigationController, searchNavigationController, imageSelectorNavigationController, notificationsNavigationController, profileNavigationController]
@@ -44,7 +45,7 @@ class MainTabController: UITabBarController {
         self.selectedIndex = 0
         addSwipeFeature()
         self.tabBar.tintColor = .label
-        self.tabBar.barTintColor = UIColor(named: "background")
+        self.tabBar.barTintColor = UIColor(named: "background")?.withAlphaComponent(0.1)
     }
     
     func templateNavigationController(unselectedImage: String, selectedImage: String, rootViewController: UIViewController)-> UINavigationController {
@@ -55,7 +56,7 @@ class MainTabController: UITabBarController {
             navigationController.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: unselectedImage), selectedImage: UIImage(systemName: selectedImage))
         }
         navigationController.navigationBar.tintColor = .label
-        navigationController.navigationBar.barTintColor = UIColor(named: "background")
+        navigationController.navigationBar.barTintColor = UIColor(named: "background")?.withAlphaComponent(0.1)
         
         return navigationController
     }
@@ -98,6 +99,7 @@ extension MainTabController: UITabBarControllerDelegate {
         }
 
         UIView.transition(from: fromView, to: toView, duration: 0.3, options: [.transitionCrossDissolve], completion: nil)
+        
         return true
     }
 }

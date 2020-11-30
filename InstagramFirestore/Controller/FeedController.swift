@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-private let resuseIdentifier = "feedCell"
+// MARK: - Reuse-Identifiers
+
+private let reuseIdentifier = "feedCell"
 
 class FeedController: UICollectionViewController {
     
@@ -24,8 +26,9 @@ class FeedController: UICollectionViewController {
         self.view.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
         self.collectionView.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
         self.showLogoutButton()
+        self.showMessageButton()
         
-        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: resuseIdentifier)
+        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
     }
     
@@ -40,7 +43,7 @@ extension FeedController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: resuseIdentifier, for: indexPath) as? FeedCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? FeedCell else { return UICollectionViewCell() }
         
         return cell
     }

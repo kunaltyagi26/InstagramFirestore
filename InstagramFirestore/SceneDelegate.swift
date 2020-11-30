@@ -51,7 +51,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             //let mainTabController = MainTabController()
             let loginController = LoginController()
             let loginNavigationController = UINavigationController(rootViewController: loginController)
-            
             window.rootViewController = loginNavigationController
             self.window = window
             window.makeKeyAndVisible()
@@ -75,7 +74,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         self.setRootViewController(window: window)
                     }
                 } else {
-                    window.rootViewController?.showFinalizedActivityIndicator(for: activityIndicator, andTime: 0.0)
+                    window.rootViewController?.showFinalizedActivityIndicator(for: activityIndicator, withMessage: "Success", andTime: 0.5)
                 }
             })
         }

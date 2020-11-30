@@ -32,6 +32,14 @@
 		2B760941256FDF200007C579 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B760940256FDF1F0007C579 /* Reachability.swift */; };
 		2B760964256FE44B0007C579 /* UIViewController + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */; };
 		2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */; };
+		2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92A2572403800292090 /* ProfileCell.swift */; };
+		2BC9ABD7257250770074C890 /* ProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92D2572404600292090 /* ProfileHeader.swift */; };
+		2BC9ABDA257295480074C890 /* UploadedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9ABD9257295480074C890 /* UploadedImage.swift */; };
+		2BC9AC1F257394FE0074C890 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9AC1E257394FD0074C890 /* UserService.swift */; };
+		2BC9AC222574D5950074C890 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9AC212574D5950074C890 /* Constants.swift */; };
+		2BC9AC252574D7990074C890 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9AC242574D7990074C890 /* User.swift */; };
+		2BC9AC282574F40E0074C890 /* ProfileHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9AC272574F40D0074C890 /* ProfileHeaderViewModel.swift */; };
+		2BC9AC2B2575074C0074C890 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9AC2A2575074C0074C890 /* UserCell.swift */; };
 		B06BB9ED342EFC910E0B0201 /* Pods_InstagramFirestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E02C8EC01C7DFA6BC3C6F6AF /* Pods_InstagramFirestore.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +72,14 @@
 		2B760940256FDF1F0007C579 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extensions.swift"; sourceTree = "<group>"; };
 		2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthErrorCode + Extensions.swift"; sourceTree = "<group>"; };
+		2BB6C92A2572403800292090 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
+		2BB6C92D2572404600292090 /* ProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeader.swift; sourceTree = "<group>"; };
+		2BC9ABD9257295480074C890 /* UploadedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadedImage.swift; sourceTree = "<group>"; };
+		2BC9AC1E257394FD0074C890 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		2BC9AC212574D5950074C890 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2BC9AC242574D7990074C890 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		2BC9AC272574F40D0074C890 /* ProfileHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderViewModel.swift; sourceTree = "<group>"; };
+		2BC9AC2A2575074C0074C890 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		9E95E6B22A1A80FCEF0FC0B2 /* Pods-InstagramFirestore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstagramFirestore.release.xcconfig"; path = "Target Support Files/Pods-InstagramFirestore/Pods-InstagramFirestore.release.xcconfig"; sourceTree = "<group>"; };
 		E02C8EC01C7DFA6BC3C6F6AF /* Pods_InstagramFirestore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InstagramFirestore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -127,6 +143,7 @@
 				2B760940256FDF1F0007C579 /* Reachability.swift */,
 				2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */,
 				2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */,
+				2BC9AC212574D5950074C890 /* Constants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -136,6 +153,7 @@
 			children = (
 				2B76093A256CED8F0007C579 /* AuthService.swift */,
 				2B76093D256CEDA10007C579 /* ImageUploader.swift */,
+				2BC9AC1E257394FD0074C890 /* UserService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -158,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				2B76090D256AAAEA0007C579 /* AuthenticationViewModel.swift */,
+				2BC9AC272574F40D0074C890 /* ProfileHeaderViewModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -165,7 +184,9 @@
 		2B7608D92568EE850007C579 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				2B7608F4256963B30007C579 /* FeedCell.swift */,
+				2BB6C9332572406700292090 /* Feed */,
+				2BB6C9302572405000292090 /* Profile */,
+				2BC9AC2A2575074C0074C890 /* UserCell.swift */,
 				2B760907256A6E020007C579 /* CustomTextField.swift */,
 			);
 			path = View;
@@ -174,6 +195,8 @@
 		2B7608DA2568EE870007C579 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2BC9ABD9257295480074C890 /* UploadedImage.swift */,
+				2BC9AC242574D7990074C890 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -185,6 +208,23 @@
 				2B7608FF256A39900007C579 /* RegistrationController.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		2BB6C9302572405000292090 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				2BB6C92A2572403800292090 /* ProfileCell.swift */,
+				2BB6C92D2572404600292090 /* ProfileHeader.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		2BB6C9332572406700292090 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				2B7608F4256963B30007C579 /* FeedCell.swift */,
+			);
+			path = Feed;
 			sourceTree = "<group>";
 		};
 		570F7150A05644EB00AF1EAE /* Frameworks */ = {
@@ -321,10 +361,16 @@
 				2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */,
 				2B7608E62568F27D0007C579 /* ImageSelectorController.swift in Sources */,
 				2B760903256A44990007C579 /* UITextField + Extensions.swift in Sources */,
+				2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */,
+				2BC9AC282574F40E0074C890 /* ProfileHeaderViewModel.swift in Sources */,
 				2B7608FD256A39820007C579 /* LoginController.swift in Sources */,
+				2BC9ABDA257295480074C890 /* UploadedImage.swift in Sources */,
+				2BC9AC1F257394FE0074C890 /* UserService.swift in Sources */,
+				2BC9AC2B2575074C0074C890 /* UserCell.swift in Sources */,
 				2B76093B256CED8F0007C579 /* AuthService.swift in Sources */,
 				2B76093E256CEDA10007C579 /* ImageUploader.swift in Sources */,
 				2B7608F5256963B30007C579 /* FeedCell.swift in Sources */,
+				2BC9ABD7257250770074C890 /* ProfileHeader.swift in Sources */,
 				2B7608E32568F26B0007C579 /* SearchController.swift in Sources */,
 				2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */,
 				2B7608E02568F25A0007C579 /* FeedController.swift in Sources */,
@@ -334,12 +380,14 @@
 				2B7608DC2568EF050007C579 /* MainTabController.swift in Sources */,
 				2B76090E256AAAEA0007C579 /* AuthenticationViewModel.swift in Sources */,
 				2B7608E92568F2970007C579 /* NotificationsController.swift in Sources */,
+				2BC9AC252574D7990074C890 /* User.swift in Sources */,
 				2B76090B256A703F0007C579 /* UIButton + Extensions.swift in Sources */,
 				2B7608F8256964720007C579 /* UIView + Extensions.swift in Sources */,
 				2B7608C12568EE100007C579 /* SceneDelegate.swift in Sources */,
 				2B760900256A39900007C579 /* RegistrationController.swift in Sources */,
 				2B760941256FDF200007C579 /* Reachability.swift in Sources */,
 				2B760908256A6E020007C579 /* CustomTextField.swift in Sources */,
+				2BC9AC222574D5950074C890 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

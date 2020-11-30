@@ -7,17 +7,157 @@
 
 import Foundation
 import UIKit
+import JGProgressHUD
 
-class ProfileController: UIViewController {
+// MARK: - Reuse-Identifiers
+
+private let profileHeaderCellReuseIdentifier = "profileHeaderCell"
+private let profileCellReuseIdentifier = "profileCell"
+
+class ProfileController: UICollectionViewController {
+    
+    // MARK: - Properties
+    
+    enum Section {
+      case main
+    }
+    
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, UploadedImage>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, UploadedImage>
+    
+    private lazy var dataSource = makeDataSource()
+    var uploadedImages = [UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!)]
+    
+    var user: User? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    private var activityIndicator = JGProgressHUD(automaticStyle: ())
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Profile"
-        self.view.backgroundColor = .systemBackground
-        self.showLogoutButton()
+        activityIndicator = self.showActivityIndicator()
+        configureView()
+        fetchUser()
+        applySnapshot(animatingDifferences: true)
+    }
+    
+    // MARK: - API
+    
+    func fetchUser() {
+        UserService.fetchUser { (result) in
+            switch result {
+            case .success(let user):
+                self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: "Success", andTime: 0.5)
+                print(user)
+                self.user = user
+            case .failure(let error):
+                print(error)
+                self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: error.localizedDescription)
+            }
+        }
     }
     
     // MARK: - Helpers
+    
+    func configureView() {
+        self.navigationItem.title = "Profile"
+        self.view.backgroundColor = UIColor(named: "background")
+        self.showLogoutButton()
+        self.showMessageButton()
+        configureCollectionView()
+    }
+    
+    func configureCollectionView() {
+        self.collectionView.backgroundColor = UIColor(named: "background")
+        collectionView.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: profileHeaderCellReuseIdentifier)
+        collectionView.register(ProfileCell.self, forCellWithReuseIdentifier: profileCellReuseIdentifier)
+    }
+    
+    func makeDataSource() -> DataSource {
+      let dataSource = DataSource(
+        collectionView: collectionView,
+        cellProvider: { (collectionView, indexPath, image) ->
+          UICollectionViewCell? in
+          let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: profileCellReuseIdentifier,
+            for: indexPath) as? ProfileCell
+            cell?.setImage(image: image.image)
+          return cell
+      })
+        
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+          guard kind == UICollectionView.elementKindSectionHeader else {
+            return nil
+          }
+          let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: profileHeaderCellReuseIdentifier,
+            for: indexPath) as? ProfileHeader
+            if let user = self.user {
+                view?.viewModel = ProfileHeaderViewModel(user: user)
+            }
+          return view
+        }
+      return dataSource
+    }
+    
+    func applySnapshot(animatingDifferences: Bool = true) {
+          var snapshot = Snapshot()
+          snapshot.appendSections([.main])
+          snapshot.appendItems(uploadedImages)
+          dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+    }
 }
+
+// MARK: - UICollectionViewDataSource
+
+/*extension ProfileController {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: profileCellReuseIdentifier, for: indexPath) as? ProfileCell else { return UICollectionViewCell() }
+        return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var header = UICollectionReusableView()
+        if kind == UICollectionView.elementKindSectionHeader {
+            if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: profileHeaderCellReuseIdentifier, for: indexPath)
+                as? ProfileHeader {
+                header = headerView
+            }
+        }
+        return header
+    }
+}*/
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension ProfileController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = view.frame.width
+        return CGSize(width: (width - 2) / 3, height: width / 3)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let profileHeader = ProfileHeader()
+        print(profileHeader.getHeight())
+        return CGSize(width: collectionView.frame.width, height: 228)
+    }
+}
+

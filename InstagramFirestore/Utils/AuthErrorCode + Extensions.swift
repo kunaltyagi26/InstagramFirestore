@@ -29,3 +29,11 @@ extension AuthErrorCode {
         }
     }
 }
+
+/*extension FirestoreErrorCode {
+    var errorMessage: String {
+        switch self {
+        case .
+        }
+    }
+}*/

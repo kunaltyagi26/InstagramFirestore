@@ -26,7 +26,8 @@ extension UIViewController {
         hud.textLabel.text = "Loading"
         hud.shadow = JGProgressHUDShadow(color: .label, offset: .zero, radius: 10.0, opacity: 0.2)
         hud.animation = JGProgressHUDFadeZoomAnimation()
-        hud.show(in: self.view)
+        hud.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+        hud.show(in: self.tabBarController?.view ?? self.view)
         return hud
     }
     
@@ -45,6 +46,10 @@ extension UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
     }
     
+    func showMessageButton() {
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "paperplane"), style: .plain, target: self, action: #selector(didTapMessageButton))
+    }
+    
     @objc func handleLogout() {
         let activityIndicator = self.showActivityIndicator()
         
@@ -53,14 +58,16 @@ extension UIViewController {
             case .success(_):
                 self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: "Success", andTime: 0.5)
                 activityIndicator.perform {
-                    guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
-                    let window = UIWindow(windowScene: windowScene)
-                    sceneDelegate.setRootViewController(window: window)
+                    self.dismiss(animated: true, completion: nil)
                 }
             case .failure(let error):
                 self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: error.localizedDescription)
             }
         }
+    }
+    
+    @objc func didTapMessageButton() {
+        self.navigationController?.pushViewController(LoginController(), animated: true)
     }
     
     func mapError(_ error: Error)-> String {
