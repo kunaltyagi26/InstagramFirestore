@@ -48,12 +48,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func setRootViewController(window: UIWindow) {
         if Auth.auth().currentUser == nil {
-            //let mainTabController = MainTabController()
             let loginController = LoginController()
             let loginNavigationController = UINavigationController(rootViewController: loginController)
-            window.rootViewController = loginNavigationController
-            self.window = window
-            window.makeKeyAndVisible()
+            UIView.animate(withDuration: 0.2) {
+                window.rootViewController = loginNavigationController
+                self.window = window
+                window.makeKeyAndVisible()
+            }
         } else {
             let mainTabController = MainTabController()
 

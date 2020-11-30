@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import FirebaseAuth
 
 class ProfileHeader: UICollectionReusableView {
     
@@ -98,7 +99,6 @@ class ProfileHeader: UICollectionReusableView {
     
     private lazy var editProfileButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Edit Profile", for: .normal)
         button.backgroundColor = UIColor(named: "background")
         button.tintColor = .label
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
@@ -221,6 +221,7 @@ class ProfileHeader: UICollectionReusableView {
         if let viewModel = viewModel {
             self.fullNameLabel.text = viewModel.fullName
             self.profileImageView.sd_setImage(with: viewModel.profileImageUrl, completed: nil)
+            editProfileButton.setTitle(viewModel.uid == Auth.auth().currentUser?.uid ? "Edit Profile" : "Follow", for: .normal)
         }
     }
     

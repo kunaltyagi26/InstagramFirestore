@@ -42,6 +42,12 @@ class UserCell: UITableViewCell {
     
     private var stackView = UIStackView()
     
+    var user: UserCellViewModel? {
+        didSet {
+            configureData()
+        }
+    }
+    
     // MARK: - Lifecycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -76,8 +82,9 @@ class UserCell: UITableViewCell {
         stackView.anchor(top: topAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 12, paddingBottom: 12, paddingRight: 12)
     }
     
-    func configureData(user: User) {
-        self.profileImageView.sd_setImage(with: URL(string: user.profileImageUrl), completed: nil)
+    func configureData() {
+        guard let user = user else { return }
+        self.profileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
         self.usernameLabel.text = user.username
         self.fullNameLabel.text = user.fullName
     }

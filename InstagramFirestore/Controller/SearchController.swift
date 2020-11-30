@@ -17,13 +17,18 @@ class SearchController: UITableViewController {
     
     // MARK: - Properties
     
-    var users: [User]? {
+    private var users: [User]? {
         didSet {
             self.tableView.reloadData()
         }
     }
+    private var filteredUsers = [User]()
+    private var inSearchMode: Bool {
+        return searchController.isActive && !(searchController.searchBar.text?.isEmpty ?? false)
+    }
     
     private var activityIndicator = JGProgressHUD(automaticStyle: ())
+    private var searchController = UISearchController(searchResultsController: nil)
     
     // MARK: - Lifecycle
     
@@ -39,9 +44,8 @@ class SearchController: UITableViewController {
         self.navigationItem.title = "Search"
         self.view.backgroundColor = UIColor(named: "background")
         self.tableView.backgroundColor = UIColor(named: "background")
-        self.showLogoutButton()
-        self.showMessageButton()
         configureTableView()
+        configureSearchController()
         fetchUsers()
     }
     
@@ -51,7 +55,17 @@ class SearchController: UITableViewController {
         self.tableView.tableFooterView = footerView
         tableView.estimatedRowHeight = 60.0
         self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+    }
+    
+    func configureSearchController() {
+        self.navigationItem.hidesSearchBarWhenScrolling = true
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
+        definesPresentationContext = false
     }
     
     func fetchUsers() {
@@ -59,31 +73,61 @@ class SearchController: UITableViewController {
             switch result {
             case .success(let users):
                 self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: "Success", andTime: 0.5)
-                print(users)
                 self.users = users
             case .failure(let error):
-                print(error)
                 self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: error.localizedDescription)
             }
         }
     }
 }
 
-// MARK: - UITableViewDataSourceDelegate
+// MARK: - UITableViewDataSource
 
 extension SearchController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users?.count ?? 0
+        inSearchMode ? filteredUsers.count : users?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: searchCellReuseIdentifier) as? UserCell else { return UITableViewCell() }
         cell.backgroundColor = .clear
-    
-        if let user = users?[indexPath.row] {
-            cell.configureData(user: user)
+        var user: User?
+        user = inSearchMode ? filteredUsers[indexPath.row] : users?[indexPath.row]
+        if let user = user {
+            cell.user = UserCellViewModel(user: user)
         }
         
         return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension SearchController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            tableView.deselectRow(at: indexPath, animated: true)
+            let profileLayout = UICollectionViewFlowLayout()
+            let profileController = ProfileController(collectionViewLayout: profileLayout)
+            if let user = self.users?[indexPath.row] {
+                profileController.user = user
+                profileController.isFromSearch = true
+            }
+            self.navigationController?.pushViewController(profileController, animated: true)
+        }
+    }
+}
+
+// MARK: - UISearchResultsUpdating
+
+extension SearchController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text?.lowercased() else { return }
+        guard let users = users else { return }
+        filteredUsers = users.filter {
+            $0.username.lowercased().contains(searchText) ||
+                $0.fullName.lowercased().contains(searchText)
+        }
+        self.tableView.reloadData()
     }
 }

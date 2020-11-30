@@ -15,9 +15,7 @@ class ImageSelectorController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Select Image"
-        self.view.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
-        self.showLogoutButton()
-        self.showMessageButton()
+        self.view.backgroundColor = UIColor(named: "background")
     }
     
     // MARK: - Helpers

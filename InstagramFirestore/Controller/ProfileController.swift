@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import JGProgressHUD
+import Firebase
 
 // MARK: - Reuse-Identifiers
 
@@ -26,37 +27,49 @@ class ProfileController: UICollectionViewController {
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, UploadedImage>
     
     private lazy var dataSource = makeDataSource()
-    var uploadedImages = [UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!)]
+    private var uploadedImages = [UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!)]
     
     var user: User? {
         didSet {
             collectionView.reloadData()
         }
     }
-    
+
     private var activityIndicator = JGProgressHUD(automaticStyle: ())
+    var isFromSearch: Bool = false
     
     // MARK: - Lifecycle
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        activityIndicator = self.showActivityIndicator()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureView()
-        fetchUser()
+        
+        if isFromSearch {
+            if user == nil {
+                activityIndicator = self.showActivityIndicator()
+                self.showFinalizedActivityIndicator(for: self.activityIndicator, withError: "User details cannot be fetched. Please try again later.")
+                activityIndicator.perform {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        } else {
+            activityIndicator = self.showActivityIndicator()
+            if let uid = Auth.auth().currentUser?.uid {
+                fetchUser(uid: uid)
+            }
+        }
         applySnapshot(animatingDifferences: true)
     }
     
     // MARK: - API
     
-    func fetchUser() {
-        UserService.fetchUser { (result) in
+    func fetchUser(uid: String) {
+        UserService.fetchUser(uid: uid) { (result) in
             switch result {
             case .success(let user):
                 self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: "Success", andTime: 0.5)
-                print(user)
                 self.user = user
             case .failure(let error):
-                print(error)
                 self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: error.localizedDescription)
             }
         }
@@ -67,8 +80,6 @@ class ProfileController: UICollectionViewController {
     func configureView() {
         self.navigationItem.title = "Profile"
         self.view.backgroundColor = UIColor(named: "background")
-        self.showLogoutButton()
-        self.showMessageButton()
         configureCollectionView()
     }
     
@@ -114,30 +125,6 @@ class ProfileController: UICollectionViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
-
-/*extension ProfileController {
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: profileCellReuseIdentifier, for: indexPath) as? ProfileCell else { return UICollectionViewCell() }
-        return cell
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var header = UICollectionReusableView()
-        if kind == UICollectionView.elementKindSectionHeader {
-            if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: profileHeaderCellReuseIdentifier, for: indexPath)
-                as? ProfileHeader {
-                header = headerView
-            }
-        }
-        return header
-    }
-}*/
-
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension ProfileController: UICollectionViewDelegateFlowLayout {
@@ -155,8 +142,6 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let profileHeader = ProfileHeader()
-        print(profileHeader.getHeight())
         return CGSize(width: collectionView.frame.width, height: 228)
     }
 }

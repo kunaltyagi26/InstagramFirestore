@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class MainTabController: UITabBarController {
     
@@ -38,6 +39,9 @@ class MainTabController: UITabBarController {
                 
         let profileLayout = UICollectionViewFlowLayout()
         let profileController = ProfileController(collectionViewLayout: profileLayout)
+        /*if let uid = Auth.auth().currentUser?.uid {
+            profileController.uid = uid
+        }*/
         let profileNavigationController = templateNavigationController(unselectedImage: "person", selectedImage: "person.fill", rootViewController: profileController)
         
         self.viewControllers = [feedNavigationController, searchNavigationController, imageSelectorNavigationController, notificationsNavigationController, profileNavigationController]

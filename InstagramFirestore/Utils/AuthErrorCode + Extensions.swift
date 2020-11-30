@@ -30,6 +30,7 @@ extension AuthErrorCode {
     }
 }
 
+// TODO: - Map error
 /*extension FirestoreErrorCode {
     var errorMessage: String {
         switch self {

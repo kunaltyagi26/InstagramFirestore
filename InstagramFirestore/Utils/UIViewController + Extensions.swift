@@ -36,7 +36,7 @@ extension UIViewController {
             indicator.indicatorView = JGProgressHUDSuccessIndicatorView()
             indicator.textLabel.text = message
         } else if let error = error, error != "" {
-            indicator.indicatorView = JGProgressHUDSuccessIndicatorView()
+            indicator.indicatorView = JGProgressHUDErrorIndicatorView()
             indicator.textLabel.text = error
         }
         indicator.dismiss(afterDelay: time, animated: true)
@@ -56,7 +56,7 @@ extension UIViewController {
         AuthService().signOut { (result) in
             switch result {
             case .success(_):
-                self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: "Success", andTime: 0.5)
+                self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: "Success", andTime: 0.8)
                 activityIndicator.perform {
                     guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
                     let window = UIWindow(windowScene: windowScene)
@@ -107,7 +107,6 @@ extension UIViewController {
         } else {
             if let errorCode = AuthErrorCode(rawValue: error._code) {
                 // now you can use the .errorMessage var to get your custom error message
-                print(errorCode.errorMessage)
                 errorMessage = errorCode.errorMessage
             }
         }

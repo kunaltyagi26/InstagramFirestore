@@ -1,5 +1,5 @@
 //
-//  ProfileHeaderViewModel.swift
+//  UserCellViewModel.swift
 //  InstagramFirestore
 //
 //  Created by Kunal Tyagi on 30/11/20.
@@ -7,25 +7,20 @@
 
 import Foundation
 
-struct ProfileHeaderViewModel {
-    
-    // MARK: - Properties
-    
-    let user: User
-    
-    var fullName: String {
-        return user.fullName
-    }
+struct UserCellViewModel {
+    private let user: User
     
     var profileImageUrl: URL? {
         return URL(string: user.profileImageUrl)
     }
     
-    var uid: String {
-        return user.uid
+    var username: String {
+        return user.username
     }
     
-    // MARK: - Lifecycle
+    var fullName: String {
+        return user.fullName
+    }
     
     init(user: User) {
         self.user = user
