@@ -53,9 +53,11 @@ class ProfileController: UICollectionViewController {
                 }
             }
         } else {
-            activityIndicator = self.showActivityIndicator()
-            if let uid = Auth.auth().currentUser?.uid {
-                fetchUser(uid: uid)
+            if user == nil {
+                activityIndicator = self.showActivityIndicator()
+                if let uid = Auth.auth().currentUser?.uid {
+                    fetchUser(uid: uid)
+                }
             }
         }
         applySnapshot(animatingDifferences: true)
