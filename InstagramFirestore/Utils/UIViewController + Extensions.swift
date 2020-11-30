@@ -58,7 +58,9 @@ extension UIViewController {
             case .success(_):
                 self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: "Success", andTime: 0.5)
                 activityIndicator.perform {
-                    self.dismiss(animated: true, completion: nil)
+                    guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
+                    let window = UIWindow(windowScene: windowScene)
+                    sceneDelegate.setRootViewController(window: window)
                 }
             case .failure(let error):
                 self.showFinalizedActivityIndicator(for: activityIndicator, withMessage: error.localizedDescription)
