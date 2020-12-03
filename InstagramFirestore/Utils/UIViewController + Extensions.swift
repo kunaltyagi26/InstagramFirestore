@@ -26,7 +26,7 @@ extension UIViewController {
         hud.textLabel.text = "Loading"
         hud.shadow = JGProgressHUDShadow(color: .label, offset: .zero, radius: 10.0, opacity: 0.2)
         hud.animation = JGProgressHUDFadeZoomAnimation()
-        hud.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+        //hud.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         hud.show(in: self.tabBarController?.view ?? self.view)
         return hud
     }

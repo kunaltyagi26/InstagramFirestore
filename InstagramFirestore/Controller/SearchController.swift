@@ -34,8 +34,13 @@ class SearchController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        activityIndicator = self.showActivityIndicator()
         configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        activityIndicator = self.showActivityIndicator()
+        fetchUsers()
     }
     
     // MARK: - Helpers
@@ -46,7 +51,7 @@ class SearchController: UITableViewController {
         self.tableView.backgroundColor = UIColor(named: "background")
         configureTableView()
         configureSearchController()
-        fetchUsers()
+        
     }
     
     func configureTableView() {
@@ -72,8 +77,13 @@ class SearchController: UITableViewController {
         UserService.fetchUsers { (result) in
             switch result {
             case .success(let users):
-                self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: "Success", andTime: 0.5)
                 self.users = users
+                /*for index in 0..<users.count {
+                    UserService.checkIfUserIsFollowed(uid: users[index].uid) { (isFollowed) in
+                        self.users?[index].isFollowed = isFollowed
+                    }
+                }*/
+                self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: "Success", andTime: 0.5)
             case .failure(let error):
                 self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: error.localizedDescription)
             }
@@ -112,8 +122,10 @@ extension SearchController {
             if let user = self.users?[indexPath.row] {
                 profileController.user = user
                 profileController.isFromSearch = true
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(profileController, animated: true)
+                }
             }
-            self.navigationController?.pushViewController(profileController, animated: true)
         }
     }
 }

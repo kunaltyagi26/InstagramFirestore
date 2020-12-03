@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 struct User: Codable {
     let uid: String
@@ -14,6 +15,13 @@ struct User: Codable {
     let fullName: String
     let profileImageUrl: String
     
+    var stats: UserStats?
+    
+    var isFollowed: Bool?
+    var isCurrentUser: Bool {
+        return Auth.auth().currentUser?.uid == uid
+    }
+    
     init(dictionary: [String:Any]) {
         self.uid = dictionary["uid"] as? String ?? ""
         self.email = dictionary["email"] as? String ?? ""
@@ -21,4 +29,9 @@ struct User: Codable {
         self.fullName = dictionary["fullName"] as? String ?? ""
         self.profileImageUrl = dictionary["profileImageUrl"] as? String ?? ""
     }
+}
+
+struct UserStats: Codable {
+    let followers: Int
+    let following: Int
 }

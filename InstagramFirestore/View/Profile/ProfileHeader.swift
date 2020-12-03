@@ -9,6 +9,10 @@ import UIKit
 import SDWebImage
 import FirebaseAuth
 
+protocol ProfileHeaderDelegate: class {
+    func header(_ profileHeader: ProfileHeader, didTapActionButtonFor user: User)
+}
+
 class ProfileHeader: UICollectionReusableView {
     
     // MARK: - Properties
@@ -60,7 +64,7 @@ class ProfileHeader: UICollectionReusableView {
     
     private let followersLabel: UILabel = {
         let label = UILabel()
-        label.text = "1"
+        label.text = ""
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textAlignment = .center
         return label
@@ -77,7 +81,7 @@ class ProfileHeader: UICollectionReusableView {
     
     private let followingLabel: UILabel = {
         let label = UILabel()
-        label.text = "1"
+        label.text = ""
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textAlignment = .center
         return label
@@ -99,6 +103,7 @@ class ProfileHeader: UICollectionReusableView {
     
     private lazy var editProfileButton: UIButton = {
         let button = UIButton(type: .system)
+        button.setTitle("Loading", for: .normal)
         button.backgroundColor = UIColor(named: "background")
         button.tintColor = .label
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
@@ -140,6 +145,8 @@ class ProfileHeader: UICollectionReusableView {
         button.addTarget(self, action: #selector(didTapBookmark), for: .touchUpInside)
         return button
     }()
+    
+    weak var delegate: ProfileHeaderDelegate?
     
     // MARK: - Lifecycle
     
@@ -221,7 +228,18 @@ class ProfileHeader: UICollectionReusableView {
         if let viewModel = viewModel {
             self.fullNameLabel.text = viewModel.fullName
             self.profileImageView.sd_setImage(with: viewModel.profileImageUrl, completed: nil)
-            editProfileButton.setTitle(viewModel.uid == Auth.auth().currentUser?.uid ? "Edit Profile" : "Follow", for: .normal)
+            editProfileButton.setTitle(viewModel.followButtonText, for: .normal)
+            editProfileButton.backgroundColor = viewModel.followButtonBackgroundColor
+            editProfileButton.setTitleColor(viewModel.followButtonTitleColor, for: .normal)
+            followersLabel.text = viewModel.numberOfFollowers
+            followingLabel.text = viewModel.numberOfFollowing
+        }
+    }
+    
+    func updateUIForEditProFileButton() {
+        if let isFollowed = viewModel?.user.isFollowed {
+            viewModel?.user.isFollowed = !isFollowed
+            configureData()
         }
     }
     
@@ -261,7 +279,8 @@ class ProfileHeader: UICollectionReusableView {
     // MARK: - Actions
     
     @objc func didTapEditProfile() {
-        
+        guard let viewModel = viewModel else { return }
+        delegate?.header(self, didTapActionButtonFor: viewModel.user)
     }
     
     @objc func didTapGrid(sender: UIButton) {
