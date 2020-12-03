@@ -121,7 +121,6 @@ extension SearchController {
             let profileController = ProfileController(collectionViewLayout: profileLayout)
             if let user = self.users?[indexPath.row] {
                 profileController.user = user
-                profileController.isFromSearch = true
                 DispatchQueue.main.async {
                     self.navigationController?.pushViewController(profileController, animated: true)
                 }

@@ -32,7 +32,6 @@ class ProfileController: UICollectionViewController {
     var user: User?
 
     private var activityIndicator = JGProgressHUD(automaticStyle: ())
-    var isFromSearch: Bool = false
     
     let dispatchGroup = DispatchGroup()
     
