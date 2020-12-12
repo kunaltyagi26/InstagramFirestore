@@ -103,17 +103,6 @@ extension UIView {
         self.layer.shadowRadius = shadowRadius
         self.layer.shadowOffset = shadowOffset
         self.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
-        
-        /*let shadowLayer = CAShapeLayer()
-        shadowLayer.frame = self.bounds
-        shadowLayer.backgroundColor = UIColor(named: "background")?.cgColor
-        shadowLayer.shadowColor = UIColor.black.withAlphaComponent(0.9).cgColor
-        shadowLayer.cornerRadius = cornerRadius
-        shadowLayer.shadowOffset = CGSize(width: -5.0, height: -5.0)
-        shadowLayer.shadowOpacity = 1
-        shadowLayer.shadowRadius = 15
-        
-        self.layer.insertSublayer(shadowLayer, at: 0)*/
     }
 }
 

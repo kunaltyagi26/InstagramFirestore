@@ -8,8 +8,13 @@
 import Foundation
 import UIKit
 import Firebase
+import YPImagePicker
 
 class MainTabController: UITabBarController {
+    
+    // MARK: - Properties
+    
+    var imageSelectorController = YPImagePicker()
     
     // MARK: - Lifecycle
     
@@ -30,21 +35,18 @@ class MainTabController: UITabBarController {
         
         let searchController = SearchController()
         let searchNavigationController = templateNavigationController(unselectedImage: "magnifyingglass", selectedImage: "magnifyingglass", rootViewController: searchController)
-    
-        let imageSelectorController = ImageSelectorController()
-        let imageSelectorNavigationController = templateNavigationController(unselectedImage: "plus.circle", selectedImage: "plus.circle.fill", rootViewController: imageSelectorController)
+        
+        imageSelectorController = createImageSelectorController()
+        didFinishPickingImage(imageSelectorController)
         
         let notificationsController = NotificationsController()
         let notificationsNavigationController = templateNavigationController(unselectedImage: "heart", selectedImage: "heart.fill", rootViewController: notificationsController)
                 
         let profileLayout = UICollectionViewFlowLayout()
         let profileController = ProfileController(collectionViewLayout: profileLayout)
-        /*if let uid = Auth.auth().currentUser?.uid {
-            profileController.uid = uid
-        }*/
         let profileNavigationController = templateNavigationController(unselectedImage: "person", selectedImage: "person.fill", rootViewController: profileController)
         
-        self.viewControllers = [feedNavigationController, searchNavigationController, imageSelectorNavigationController, notificationsNavigationController, profileNavigationController]
+        self.viewControllers = [feedNavigationController, searchNavigationController, imageSelectorController, notificationsNavigationController, profileNavigationController]
         
         self.selectedIndex = 0
         addSwipeFeature()
@@ -65,6 +67,35 @@ class MainTabController: UITabBarController {
         return navigationController
     }
     
+    func createImageSelectorController()-> YPImagePicker {
+        var config = YPImagePickerConfiguration()
+        config.library.mediaType = .photo
+        config.shouldSaveNewPicturesToAlbum = true
+        config.startOnScreen = .library
+        config.screens = [.library]
+        config.hidesStatusBar = false
+        config.hidesBottomBar = false
+        config.library.maxNumberOfItems = 1
+        config.hidesCancelButton = true
+        config.colors.libraryScreenBackgroundColor = UIColor(named: "background") ?? .systemBackground
+        config.colors.filterBackgroundColor = UIColor(named: "background") ?? .systemBackground
+        
+        let imageSelectorController = YPImagePicker(configuration: config)
+        imageSelectorController.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "plus.circle"), selectedImage: UIImage(systemName: "plus.circle.fill"))
+        return imageSelectorController
+    }
+    
+    func didFinishPickingImage(_ picker: YPImagePicker) {
+        picker.didFinishPicking { items, cancelled in
+            DispatchQueue.main.async {
+                guard let selectedImage = items.singlePhoto?.image else { return }
+                let uploadPostController = UploadPostController()
+                uploadPostController.selectedImage = selectedImage
+                self.imageSelectorController.pushViewController(uploadPostController, animated: true)
+            }
+        }
+    }
+    
     func addSwipeFeature() {
         let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
@@ -73,6 +104,12 @@ class MainTabController: UITabBarController {
         self.view.addGestureRecognizer(leftSwipe)
         self.view.addGestureRecognizer(rightSwipe)
     }
+    
+    func set(selectedIndex index : Int) {
+       _ = self.tabBarController(self, shouldSelect: self.viewControllers![index])
+    }
+    
+    // MARK: - Actions
     
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
         if sender.direction == .left && self.selectedIndex < 4 {
@@ -95,6 +132,8 @@ class MainTabController: UITabBarController {
         }
     }
 }
+
+// MARK: - UITabBarControllerDelegate Extension
 
 extension MainTabController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {

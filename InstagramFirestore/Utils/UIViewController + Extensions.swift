@@ -10,6 +10,8 @@ import JGProgressHUD
 import Firebase
 
 extension UIViewController {
+    static var activityIndicator = JGProgressHUD(automaticStyle: ())
+    
     func showAlert(title: String, message: String, firstActionTitle: String = "OK", secondActionTitle: String? = "", firstActionHandler: ((UIAlertAction) -> Void)? = nil, secondActionHandler: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: firstActionTitle, style: .default, handler: firstActionHandler))

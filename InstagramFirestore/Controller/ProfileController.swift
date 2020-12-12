@@ -31,8 +31,6 @@ class ProfileController: UICollectionViewController {
     
     var user: User?
 
-    private var activityIndicator = JGProgressHUD(automaticStyle: ())
-    
     let dispatchGroup = DispatchGroup()
     
     // MARK: - Lifecycle
@@ -47,7 +45,7 @@ class ProfileController: UICollectionViewController {
     // MARK: - API
     
     func getData() {
-        activityIndicator = self.showActivityIndicator()
+        ProfileController.activityIndicator = self.showActivityIndicator()
         if user == nil {
             dispatchGroup.enter()
             if let uid = Auth.auth().currentUser?.uid {
@@ -76,7 +74,7 @@ class ProfileController: UICollectionViewController {
         
         dispatchGroup.notify(queue: .main) {
             self.collectionView.reloadData()
-            self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: "Success", andTime: 0.5)
+            self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: "Success", andTime: 0.5)
         }
     }
     
@@ -88,7 +86,7 @@ class ProfileController: UICollectionViewController {
                     self.user = user
                     self.dispatchGroup.leave()
                 case .failure(let error):
-                    self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: error.localizedDescription)
+                    self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: error.localizedDescription)
                 }
             }
         }

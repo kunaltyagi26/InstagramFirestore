@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B72FBA0257FE9E600D64C4B /* UploadPostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FB9F257FE9E600D64C4B /* UploadPostController.swift */; };
+		2B72FBA3257FF6A100D64C4B /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBA2257FF6A100D64C4B /* CustomTextView.swift */; };
+		2B72FBA62581442200D64C4B /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBA52581442200D64C4B /* PostService.swift */; };
+		2B72FBA92584A41200D64C4B /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBA82584A41200D64C4B /* Post.swift */; };
+		2B72FBAC2584ABE900D64C4B /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBAB2584ABE900D64C4B /* PostViewModel.swift */; };
 		2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608BE2568EE100007C579 /* AppDelegate.swift */; };
 		2B7608C12568EE100007C579 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608C02568EE100007C579 /* SceneDelegate.swift */; };
 		2B7608C82568EE140007C579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B7608C72568EE140007C579 /* Assets.xcassets */; };
@@ -46,6 +51,11 @@
 
 /* Begin PBXFileReference section */
 		0B1CE894AEBB94F4EBDB0F7F /* Pods-InstagramFirestore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstagramFirestore.debug.xcconfig"; path = "Target Support Files/Pods-InstagramFirestore/Pods-InstagramFirestore.debug.xcconfig"; sourceTree = "<group>"; };
+		2B72FB9F257FE9E600D64C4B /* UploadPostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostController.swift; sourceTree = "<group>"; };
+		2B72FBA2257FF6A100D64C4B /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
+		2B72FBA52581442200D64C4B /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
+		2B72FBA82584A41200D64C4B /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		2B72FBAB2584ABE900D64C4B /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		2B7608BB2568EE100007C579 /* InstagramFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B7608BE2568EE100007C579 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B7608C02568EE100007C579 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +166,7 @@
 				2B76093A256CED8F0007C579 /* AuthService.swift */,
 				2B76093D256CEDA10007C579 /* ImageUploader.swift */,
 				2BC9AC1E257394FD0074C890 /* UserService.swift */,
+				2B72FBA52581442200D64C4B /* PostService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -170,6 +181,7 @@
 				2B7608E52568F27D0007C579 /* ImageSelectorController.swift */,
 				2B7608E82568F2970007C579 /* NotificationsController.swift */,
 				2B7608EB2568F2A30007C579 /* ProfileController.swift */,
+				2B72FB9F257FE9E600D64C4B /* UploadPostController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -180,6 +192,7 @@
 				2B76090D256AAAEA0007C579 /* AuthenticationViewModel.swift */,
 				2BC9AC272574F40D0074C890 /* ProfileHeaderViewModel.swift */,
 				2BC9AC2E257566CC0074C890 /* UserCellViewModel.swift */,
+				2B72FBAB2584ABE900D64C4B /* PostViewModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -191,6 +204,7 @@
 				2BB6C9302572405000292090 /* Profile */,
 				2BC9AC2A2575074C0074C890 /* UserCell.swift */,
 				2B760907256A6E020007C579 /* CustomTextField.swift */,
+				2B72FBA2257FF6A100D64C4B /* CustomTextView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -200,6 +214,7 @@
 			children = (
 				2BC9ABD9257295480074C890 /* UploadedImage.swift */,
 				2BC9AC242574D7990074C890 /* User.swift */,
+				2B72FBA82584A41200D64C4B /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -365,6 +380,8 @@
 				2B7608E62568F27D0007C579 /* ImageSelectorController.swift in Sources */,
 				2B760903256A44990007C579 /* UITextField + Extensions.swift in Sources */,
 				2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */,
+				2B72FBA0257FE9E600D64C4B /* UploadPostController.swift in Sources */,
+				2B72FBA3257FF6A100D64C4B /* CustomTextView.swift in Sources */,
 				2BC9AC2F257566CC0074C890 /* UserCellViewModel.swift in Sources */,
 				2BC9AC282574F40E0074C890 /* ProfileHeaderViewModel.swift in Sources */,
 				2B7608FD256A39820007C579 /* LoginController.swift in Sources */,
@@ -378,12 +395,15 @@
 				2B7608E32568F26B0007C579 /* SearchController.swift in Sources */,
 				2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */,
 				2B7608E02568F25A0007C579 /* FeedController.swift in Sources */,
+				2B72FBA92584A41200D64C4B /* Post.swift in Sources */,
 				2B7608F2256949200007C579 /* CustomTabBar.swift in Sources */,
 				2B760964256FE44B0007C579 /* UIViewController + Extensions.swift in Sources */,
 				2B7608EC2568F2A30007C579 /* ProfileController.swift in Sources */,
 				2B7608DC2568EF050007C579 /* MainTabController.swift in Sources */,
+				2B72FBAC2584ABE900D64C4B /* PostViewModel.swift in Sources */,
 				2B76090E256AAAEA0007C579 /* AuthenticationViewModel.swift in Sources */,
 				2B7608E92568F2970007C579 /* NotificationsController.swift in Sources */,
+				2B72FBA62581442200D64C4B /* PostService.swift in Sources */,
 				2BC9AC252574D7990074C890 /* User.swift in Sources */,
 				2B76090B256A703F0007C579 /* UIButton + Extensions.swift in Sources */,
 				2B7608F8256964720007C579 /* UIView + Extensions.swift in Sources */,

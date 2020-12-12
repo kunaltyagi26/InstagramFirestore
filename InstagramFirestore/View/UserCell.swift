@@ -31,12 +31,14 @@ class UserCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor.systemGray
+        label.text = "Loading"
         return label
     }()
     
     private let usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.text = "Loading"
         return label
     }()
     
@@ -83,9 +85,11 @@ class UserCell: UITableViewCell {
     }
     
     func configureData() {
-        guard let user = user else { return }
-        self.profileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
-        self.usernameLabel.text = user.username
-        self.fullNameLabel.text = user.fullName
+        DispatchQueue.main.async {
+            guard let user = self.user else { return }
+            self.profileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
+            self.usernameLabel.text = user.username
+            self.fullNameLabel.text = user.fullName
+        }
     }
 }

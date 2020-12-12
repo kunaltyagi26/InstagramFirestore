@@ -11,6 +11,12 @@ class FeedCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var viewModel: PostViewModel? {
+        didSet {
+            self.configureView()
+        }
+    }
+    
     private let outerProfileImageView: UIView = {
         let outerView = UIView()
         outerView.applyshadowWithCorner(cornerRadius: 40 / 2, shadowRadius: 3, shadowOffset: CGSize(width: 3.0, height: 3.0), shadowOpacity: 1.0)
@@ -56,7 +62,6 @@ class FeedCell: UICollectionViewCell {
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 20
         iv.isUserInteractionEnabled = true
-        iv.image = #imageLiteral(resourceName: "venom-7")
         return iv
     }()
     
@@ -103,7 +108,6 @@ class FeedCell: UICollectionViewCell {
     
     private let captionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Some text caption for now..."
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
@@ -201,5 +205,13 @@ class FeedCell: UICollectionViewCell {
         
         addSubview(stackView)
         stackView.anchor(top: outerPostImageView.bottomAnchor, left: leftAnchor, paddingTop: 24, paddingLeft: 12)
+    }
+    
+    func configureView() {
+        DispatchQueue.main.async {
+            guard let viewModel = self.viewModel else { return }
+            self.postImageView.sd_setImage(with: viewModel.imageUrl, completed: nil)
+            self.captionLabel.text = viewModel.caption
+        }
     }
 }

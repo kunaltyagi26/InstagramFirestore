@@ -27,7 +27,6 @@ class SearchController: UITableViewController {
         return searchController.isActive && !(searchController.searchBar.text?.isEmpty ?? false)
     }
     
-    private var activityIndicator = JGProgressHUD(automaticStyle: ())
     private var searchController = UISearchController(searchResultsController: nil)
     
     // MARK: - Lifecycle
@@ -39,7 +38,7 @@ class SearchController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        activityIndicator = self.showActivityIndicator()
+        SearchController.activityIndicator = self.showActivityIndicator()
         fetchUsers()
     }
     
@@ -58,7 +57,7 @@ class SearchController: UITableViewController {
         self.tableView.register(UserCell.self, forCellReuseIdentifier: searchCellReuseIdentifier)
         let footerView = UIView()
         self.tableView.tableFooterView = footerView
-        tableView.estimatedRowHeight = 60.0
+        self.tableView.estimatedRowHeight = 60.0
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
     }
@@ -78,14 +77,9 @@ class SearchController: UITableViewController {
             switch result {
             case .success(let users):
                 self.users = users
-                /*for index in 0..<users.count {
-                    UserService.checkIfUserIsFollowed(uid: users[index].uid) { (isFollowed) in
-                        self.users?[index].isFollowed = isFollowed
-                    }
-                }*/
-                self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: "Success", andTime: 0.5)
+                self.showFinalizedActivityIndicator(for: SearchController.activityIndicator, withMessage: "Success", andTime: 0.5)
             case .failure(let error):
-                self.showFinalizedActivityIndicator(for: self.activityIndicator, withMessage: error.localizedDescription)
+                self.showFinalizedActivityIndicator(for: SearchController.activityIndicator, withMessage: error.localizedDescription)
             }
         }
     }
