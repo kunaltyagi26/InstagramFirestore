@@ -71,13 +71,33 @@ struct UserService {
                 followingCollection.document(uid).collection("user-following").getDocuments { (snapshot, error) in
                     if let snapshot = snapshot {
                         let following = snapshot.count
-                        completion(.success(UserStats(followers: followers, following: following)))
+                        postsCollection.order(by: "timestamp", descending: true).whereField("ownerId", isEqualTo: uid).getDocuments { (snapshot, error) in
+                            if let snapshot = snapshot {
+                                let posts = snapshot.count
+                                completion(.success(UserStats(followers: followers, following: following, posts: posts)))
+                            } else if let error = error {
+                                completion(.failure(error))
+                            }
+                        }
                     } else if let error = error {
                         completion(.failure(error))
                     }
                 }
             } else if let error = error {
                 completion(.failure(error))
+            }
+        }
+    }
+    
+    static func getFollowers(uid: String, completion: @escaping([String]?, Error?)-> Void) {
+        followersCollection.document(uid).collection("user-followers").getDocuments { (snapshot, error) in
+            if let snapshot = snapshot {
+                let followers = snapshot.documents.reduce([], { (result, snapshot) in
+                    result + [snapshot.documentID]
+                })
+                completion(followers, nil)
+            } else {
+                completion(nil, error)
             }
         }
     }

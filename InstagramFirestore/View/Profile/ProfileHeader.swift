@@ -19,7 +19,9 @@ class ProfileHeader: UICollectionReusableView {
     
     var viewModel: ProfileHeaderViewModel? {
         didSet {
-            configureData()
+            DispatchQueue.main.async {
+                self.configureData()
+            }
         }
     }
     
@@ -47,7 +49,6 @@ class ProfileHeader: UICollectionReusableView {
     
     private let postsLabel: UILabel = {
         let label = UILabel()
-        label.text = "8"
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textAlignment = .center
         return label
@@ -207,7 +208,7 @@ class ProfileHeader: UICollectionReusableView {
         
         stackView = UIStackView(arrangedSubviews: [postsStackView, followersStackView, followingStackView])
         stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fillEqually
         stackView.spacing = 16
         
         addSubview(stackView)
@@ -233,6 +234,7 @@ class ProfileHeader: UICollectionReusableView {
             editProfileButton.setTitleColor(viewModel.followButtonTitleColor, for: .normal)
             followersLabel.text = viewModel.numberOfFollowers
             followingLabel.text = viewModel.numberOfFollowing
+            postsLabel.text = viewModel.numberOfPosts
         }
     }
     

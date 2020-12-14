@@ -12,6 +12,7 @@
 		2B72FBA62581442200D64C4B /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBA52581442200D64C4B /* PostService.swift */; };
 		2B72FBA92584A41200D64C4B /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBA82584A41200D64C4B /* Post.swift */; };
 		2B72FBAC2584ABE900D64C4B /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBAB2584ABE900D64C4B /* PostViewModel.swift */; };
+		2B72FBB12584E10700D64C4B /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBB02584E10700D64C4B /* LoginManager.swift */; };
 		2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608BE2568EE100007C579 /* AppDelegate.swift */; };
 		2B7608C12568EE100007C579 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7608C02568EE100007C579 /* SceneDelegate.swift */; };
 		2B7608C82568EE140007C579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B7608C72568EE140007C579 /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 		2B72FBA52581442200D64C4B /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
 		2B72FBA82584A41200D64C4B /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		2B72FBAB2584ABE900D64C4B /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
+		2B72FBB02584E10700D64C4B /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		2B7608BB2568EE100007C579 /* InstagramFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B7608BE2568EE100007C579 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B7608C02568EE100007C579 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */,
 				2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */,
 				2BC9AC212574D5950074C890 /* Constants.swift */,
+				2B72FBB02584E10700D64C4B /* LoginManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -395,6 +398,7 @@
 				2B7608E32568F26B0007C579 /* SearchController.swift in Sources */,
 				2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */,
 				2B7608E02568F25A0007C579 /* FeedController.swift in Sources */,
+				2B72FBB12584E10700D64C4B /* LoginManager.swift in Sources */,
 				2B72FBA92584A41200D64C4B /* Post.swift in Sources */,
 				2B7608F2256949200007C579 /* CustomTabBar.swift in Sources */,
 				2B760964256FE44B0007C579 /* UIViewController + Extensions.swift in Sources */,
@@ -480,7 +484,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -535,7 +539,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

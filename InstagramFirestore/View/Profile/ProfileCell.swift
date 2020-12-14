@@ -36,7 +36,8 @@ class ProfileCell: UICollectionViewCell {
         imageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
     }
     
-    func setImage(image: UIImage) {
-        imageView.image = image
+    func setImage(url: URL) {
+        //imageView.image = image
+        imageView.sd_setImage(with: url, completed: nil)
     }
 }

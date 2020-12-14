@@ -8,10 +8,16 @@
 import UIKit
 import JGProgressHUD
 
+protocol UploadPostDelegate: AnyObject {
+    func updateFeed()
+}
+
 class UploadPostController: UIViewController {
     
     // MARK: - Properties
     
+    var user: User?
+
     private let outerPostImageView: UIView = {
         let outerView = UIView()
         outerView.applyshadowWithCorner(cornerRadius: 10, shadowRadius: 10, shadowOffset: CGSize(width: 5.0, height: 5.0), shadowOpacity: 1.0)
@@ -101,7 +107,8 @@ class UploadPostController: UIViewController {
     
     @objc func shareTapped() {
         UploadPostController.activityIndicator = self.showActivityIndicator()
-        PostService.uploadPost(image: selectedImage, caption: captionTextView.text) { (error) in
+        guard let user = user else { return }
+        PostService.uploadPost(user: user, image: selectedImage, caption: captionTextView.text) { (error) in
             if let error = error {
                 self.showFinalizedActivityIndicator(for: UploadPostController.activityIndicator, withMessage: error.localizedDescription)
             } else {

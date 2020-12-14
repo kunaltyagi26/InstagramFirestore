@@ -34,4 +34,5 @@ struct User: Codable {
 struct UserStats: Codable {
     let followers: Int
     let following: Int
+    let posts: Int
 }

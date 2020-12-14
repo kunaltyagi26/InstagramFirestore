@@ -72,6 +72,8 @@ class SearchController: UITableViewController {
         definesPresentationContext = false
     }
     
+    // MARK: - API
+    
     func fetchUsers() {
         UserService.fetchUsers { (result) in
             switch result {

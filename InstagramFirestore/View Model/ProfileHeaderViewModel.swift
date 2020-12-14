@@ -64,6 +64,13 @@ struct ProfileHeaderViewModel {
         return ""
     }
     
+    var numberOfPosts: String {
+        if let posts = user.stats?.posts {
+            return String(describing: posts)
+        }
+        return ""
+    }
+    
     // MARK: - Lifecycle
     
     init(user: User) {

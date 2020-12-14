@@ -15,12 +15,19 @@ class MainTabController: UITabBarController {
     // MARK: - Properties
     
     var imageSelectorController = YPImagePicker()
+    var user: User? {
+        didSet {
+            profileController.user = user
+        }
+    }
+    var profileController = ProfileController()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
+        fetchUser()
         configureViewControllers()
     }
     
@@ -43,7 +50,7 @@ class MainTabController: UITabBarController {
         let notificationsNavigationController = templateNavigationController(unselectedImage: "heart", selectedImage: "heart.fill", rootViewController: notificationsController)
                 
         let profileLayout = UICollectionViewFlowLayout()
-        let profileController = ProfileController(collectionViewLayout: profileLayout)
+        profileController = ProfileController(collectionViewLayout: profileLayout)
         let profileNavigationController = templateNavigationController(unselectedImage: "person", selectedImage: "person.fill", rootViewController: profileController)
         
         self.viewControllers = [feedNavigationController, searchNavigationController, imageSelectorController, notificationsNavigationController, profileNavigationController]
@@ -52,6 +59,20 @@ class MainTabController: UITabBarController {
         addSwipeFeature()
         self.tabBar.tintColor = .label
         self.tabBar.barTintColor = UIColor(named: "background")?.withAlphaComponent(0.1)
+    }
+    
+    func fetchUser() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        UserService.fetchUser(uid: uid) { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let user):
+                    self.user = user
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
     }
     
     func templateNavigationController(unselectedImage: String, selectedImage: String, rootViewController: UIViewController)-> UINavigationController {
@@ -91,6 +112,7 @@ class MainTabController: UITabBarController {
                 guard let selectedImage = items.singlePhoto?.image else { return }
                 let uploadPostController = UploadPostController()
                 uploadPostController.selectedImage = selectedImage
+                uploadPostController.user = self.user
                 self.imageSelectorController.pushViewController(uploadPostController, animated: true)
             }
         }

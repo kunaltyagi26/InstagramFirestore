@@ -23,13 +23,14 @@ class ProfileController: UICollectionViewController {
       case main
     }
     
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, UploadedImage>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, UploadedImage>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, Post>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Post>
     
     private lazy var dataSource = makeDataSource()
     private var uploadedImages = [UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!)]
     
     var user: User?
+    var posts: [Post] = []
 
     let dispatchGroup = DispatchGroup()
     
@@ -39,19 +40,12 @@ class ProfileController: UICollectionViewController {
         super.viewDidLoad()
         getData()
         configureView()
-        applySnapshot(animatingDifferences: true)
     }
     
     // MARK: - API
     
     func getData() {
         ProfileController.activityIndicator = self.showActivityIndicator()
-        if user == nil {
-            dispatchGroup.enter()
-            if let uid = Auth.auth().currentUser?.uid {
-                fetchUser(uid: uid)
-            }
-        }
         
         dispatchGroup.enter()
         UserService.getStats(uid: user?.uid ?? Auth.auth().currentUser?.uid) { (result) in
@@ -59,10 +53,10 @@ class ProfileController: UICollectionViewController {
                 switch result {
                 case .success(let userStats):
                     self.user?.stats = userStats
-                    self.dispatchGroup.leave()
                 case.failure(let error):
                     print(error)
                 }
+                self.dispatchGroup.leave()
             }
         }
         
@@ -72,9 +66,25 @@ class ProfileController: UICollectionViewController {
             self.dispatchGroup.leave()
         }
         
+        dispatchGroup.enter()
+        PostService.fetchProfilePosts { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let posts):
+                    self.posts = posts
+                    self.applySnapshot(animatingDifferences: true)
+                case.failure(let error):
+                    print(error)
+                }
+                self.dispatchGroup.leave()
+            }
+        }
+        
         dispatchGroup.notify(queue: .main) {
-            self.collectionView.reloadData()
-            self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: "Success", andTime: 0.5)
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: "Success", andTime: 0.5)
+            }
         }
     }
     
@@ -102,6 +112,7 @@ class ProfileController: UICollectionViewController {
     
     func configureCollectionView() {
         self.collectionView.backgroundColor = UIColor(named: "background")
+        self.collectionView.showsVerticalScrollIndicator = false
         collectionView.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: profileHeaderCellReuseIdentifier)
         collectionView.register(ProfileCell.self, forCellWithReuseIdentifier: profileCellReuseIdentifier)
     }
@@ -109,12 +120,12 @@ class ProfileController: UICollectionViewController {
     func makeDataSource() -> DataSource {
       let dataSource = DataSource(
         collectionView: collectionView,
-        cellProvider: { (collectionView, indexPath, image) ->
-          UICollectionViewCell? in
+        cellProvider: { (collectionView, indexPath, post) ->
+          ProfileCell? in
           let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: profileCellReuseIdentifier,
             for: indexPath) as? ProfileCell
-            cell?.setImage(image: image.image)
+            cell?.setImage(url: URL(string: post.imageUrl)!)
           return cell
       })
         
@@ -138,7 +149,7 @@ class ProfileController: UICollectionViewController {
     func applySnapshot(animatingDifferences: Bool = true) {
           var snapshot = Snapshot()
           snapshot.appendSections([.main])
-          snapshot.appendItems(uploadedImages)
+          snapshot.appendItems(posts)
           dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }
@@ -148,7 +159,7 @@ class ProfileController: UICollectionViewController {
 extension ProfileController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.frame.width
-        return CGSize(width: (width - 2) / 3, height: width / 3)
+        return CGSize(width: (width - 4) / 3, height: width / 3)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

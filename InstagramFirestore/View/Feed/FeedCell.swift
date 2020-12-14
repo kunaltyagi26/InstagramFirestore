@@ -28,14 +28,12 @@ class FeedCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.image = #imageLiteral(resourceName: "venom-7")
         iv.layer.cornerRadius = 40 / 2
         return iv
     }()
     
     private lazy var usernameButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Venom", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
@@ -101,7 +99,6 @@ class FeedCell: UICollectionViewCell {
     
     private let likesLabel: UILabel = {
         let label = UILabel()
-        label.text = "1 like"
         label.font = UIFont.boldSystemFont(ofSize: 15)
         return label
     }()
@@ -212,6 +209,10 @@ class FeedCell: UICollectionViewCell {
             guard let viewModel = self.viewModel else { return }
             self.postImageView.sd_setImage(with: viewModel.imageUrl, completed: nil)
             self.captionLabel.text = viewModel.caption
+            self.profileImageView.sd_setImage(with: viewModel.userProfilePicture, completed: nil)
+            self.usernameButton.setTitle(viewModel.userFullName, for: .normal)
+            self.likesLabel.text = "\(viewModel.likes)"
+            self.postTimeLabel.text = "\(viewModel.timestamp)"
         }
     }
 }

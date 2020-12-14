@@ -8,19 +8,32 @@
 import Foundation
 import Firebase
 
-struct Post {
+struct Post: Hashable {
+    let id: String
     let imageUrl: String
     let caption: String
     let likes: Int
-    let owner: String
+    let ownerId: String
     let timestamp: Timestamp
+    let ownerProfilePicture: String
+    let ownerFullName: String
     
     init(postId: String, dictionary: [String:Any]) {
+        self.id = dictionary["imageUrl"] as? String ?? ""
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
         self.caption = dictionary["caption"] as? String ?? ""
         self.likes = dictionary["likes"] as? Int ?? 0
-        self.owner = dictionary["owner"] as? String ?? ""
+        self.ownerId = dictionary["ownerId"] as? String ?? ""
         self.timestamp = dictionary["timestamp"] as? Timestamp ?? Timestamp(date: Date())
-        print(timestamp.dateValue().timeIntervalSinceNow / 576 / 24)
+        self.ownerProfilePicture = dictionary["ownerProfilePicture"] as? String ?? ""
+        self.ownerFullName = dictionary["ownerFullName"] as? String ?? ""
+    }
+    
+    func hash(into hasher: inout Hasher) {
+      hasher.combine(id)
+    }
+
+    static func == (lhs: Post, rhs: Post) -> Bool {
+      lhs.id == rhs.id
     }
 }
