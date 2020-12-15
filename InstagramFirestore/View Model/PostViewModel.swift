@@ -14,6 +14,10 @@ struct PostViewModel {
         self.post = post
     }
     
+    var ownerId: String {
+        return post.ownerId
+    }
+    
     var imageUrl: URL? {
         return URL(string: post.imageUrl)
     }

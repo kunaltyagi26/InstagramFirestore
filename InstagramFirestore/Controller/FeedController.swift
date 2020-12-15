@@ -154,11 +154,9 @@ extension FeedController: FeedCellDelegate {
     func handleUsernameClicked(viewModel: PostViewModel?) {
         let profileLayout = UICollectionViewFlowLayout()
         let profileController = ProfileController(collectionViewLayout: profileLayout)
-        if let user = self.users?[indexPath.row] {
-            profileController.user = user
-            DispatchQueue.main.async {
-                self.navigationController?.pushViewController(profileController, animated: true)
-            }
+        profileController.selectedUserId = viewModel?.ownerId
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(profileController, animated: true)
         }
     }
 }

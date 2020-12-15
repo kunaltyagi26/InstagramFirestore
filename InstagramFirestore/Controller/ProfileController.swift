@@ -28,8 +28,15 @@ class ProfileController: UICollectionViewController {
     
     private lazy var dataSource = makeDataSource()
     
-    var user: User?
+    var user: User? {
+        didSet {
+            if selectedUserId != nil {
+                self.navigationItem.title = user?.username
+            }
+        }
+    }
     var posts: [Post] = []
+    var selectedUserId: String?
 
     let dispatchGroup = DispatchGroup()
     
@@ -46,8 +53,49 @@ class ProfileController: UICollectionViewController {
     func getData() {
         ProfileController.activityIndicator = self.showActivityIndicator()
         
-        dispatchGroup.enter()
-        UserService.getStats(uid: user?.uid ?? "") { (result) in
+        let operation1 = BlockOperation {
+            if let selectedUserId = self.selectedUserId {
+                self.dispatchGroup.enter()
+                
+                UserService.fetchUser(uid: selectedUserId) { (result) in
+                    switch result {
+                    case .success(let user):
+                        self.user = user
+                    case .failure(let error):
+                        self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: error.localizedDescription)
+                    }
+                    self.dispatchGroup.leave()
+                    
+                }
+            }
+        }
+        
+        let operation2 = BlockOperation {
+            self.dispatchGroup.enter()
+            UserService.checkIfUserIsFollowed(uid: self.user?.uid ?? self.selectedUserId) { (isFollowed) in
+                DispatchQueue.main.async {
+                    self.user?.isFollowed = isFollowed
+                    self.dispatchGroup.leave()
+                }
+                
+            }
+        }
+        
+        if selectedUserId != nil {
+            operation2.addDependency(operation1)
+        }
+        
+        let operationQueue = OperationQueue()
+        
+        if selectedUserId != nil {
+            operationQueue.addOperation(operation1)
+            operationQueue.waitUntilAllOperationsAreFinished()
+        }
+        
+        operationQueue.addOperation(operation2)
+        
+        self.dispatchGroup.enter()
+        UserService.getStats(uid: self.user?.uid ?? self.selectedUserId) { (result) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let userStats):
@@ -60,13 +108,7 @@ class ProfileController: UICollectionViewController {
         }
         
         dispatchGroup.enter()
-        UserService.checkIfUserIsFollowed(uid: user?.uid ?? Auth.auth().currentUser?.uid) { (isFollowed) in
-            self.user?.isFollowed = isFollowed
-            self.dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        PostService.fetchProfilePosts(for: user?.uid ?? "") { (result) in
+        PostService.fetchProfilePosts(for: (user?.uid ?? selectedUserId) ?? "") { (result) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let posts):
@@ -87,24 +129,12 @@ class ProfileController: UICollectionViewController {
         }
     }
     
-    func fetchUser(uid: String) {
-        UserService.fetchUser(uid: uid) { (result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let user):
-                    self.user = user
-                    self.dispatchGroup.leave()
-                case .failure(let error):
-                    self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: error.localizedDescription)
-                }
-            }
-        }
-    }
-    
     // MARK: - Helpers
     
     func configureView() {
-        self.navigationItem.title = user?.username
+        if selectedUserId == nil {
+            self.navigationItem.title = user?.username
+        }
         self.view.backgroundColor = UIColor(named: "background")
         configureCollectionView()
     }
@@ -124,7 +154,6 @@ class ProfileController: UICollectionViewController {
           let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: profileCellReuseIdentifier,
             for: indexPath) as? ProfileCell
-            //cell?.setImage(url: URL(string: post.imageUrl)!)
             cell?.viewModel = PostViewModel(post: post)
           return cell
       })
