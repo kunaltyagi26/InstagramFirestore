@@ -11,6 +11,12 @@ class ProfileCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var viewModel: PostViewModel? {
+        didSet {
+            setImage()
+        }
+    }
+    
     private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -36,8 +42,9 @@ class ProfileCell: UICollectionViewCell {
         imageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
     }
     
-    func setImage(url: URL) {
-        //imageView.image = image
+    func setImage() {
+        guard let viewModel = self.viewModel else { return }
+        let url = viewModel.imageUrl
         imageView.sd_setImage(with: url, completed: nil)
     }
 }

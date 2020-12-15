@@ -71,7 +71,7 @@ struct UserService {
                 followingCollection.document(uid).collection("user-following").getDocuments { (snapshot, error) in
                     if let snapshot = snapshot {
                         let following = snapshot.count
-                        postsCollection.order(by: "timestamp", descending: true).whereField("ownerId", isEqualTo: uid).getDocuments { (snapshot, error) in
+                        postsCollection.whereField("ownerId", isEqualTo: uid).getDocuments { (snapshot, error) in
                             if let snapshot = snapshot {
                                 let posts = snapshot.count
                                 completion(.success(UserStats(followers: followers, following: following, posts: posts)))

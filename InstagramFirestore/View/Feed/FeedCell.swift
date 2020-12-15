@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol FeedCellDelegate: AnyObject {
+    func handleUsernameClicked(viewModel: PostViewModel?)
+}
+
 class FeedCell: UICollectionViewCell {
     
     // MARK: - Properties
@@ -16,6 +20,8 @@ class FeedCell: UICollectionViewCell {
             self.configureView()
         }
     }
+    
+    weak var delegate: FeedCellDelegate?
     
     private let outerProfileImageView: UIView = {
         let outerView = UIView()
@@ -131,7 +137,7 @@ class FeedCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc func didTapUsername() {
-        
+        delegate?.handleUsernameClicked(viewModel: viewModel)
     }
     
     @objc func didTapLike() {

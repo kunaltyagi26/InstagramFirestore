@@ -27,11 +27,12 @@ struct ProfileHeaderViewModel {
     }
     
     var followButtonText: String {
-        if user.isCurrentUser {
-            return "Edit Profile"
-        }
-        if let isFollowed = user.isFollowed {
-            return isFollowed ? "Following" : "Follow"
+        if user.isFollowed != nil && user.stats != nil {
+            if user.isCurrentUser {
+                return "Edit Profile"
+            } else if let isFollowed = user.isFollowed {
+                return isFollowed ? "Following" : "Follow"
+            }
         }
         return "Loading"
     }

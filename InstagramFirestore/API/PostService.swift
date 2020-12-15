@@ -54,8 +54,8 @@ struct PostService {
         }
     }
     
-    static func fetchProfilePosts(completion: @escaping(Result<[Post], Error>) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+    static func fetchProfilePosts(for uid: String, completion: @escaping(Result<[Post], Error>) -> Void) {
+        //guard let uid = Auth.auth().currentUser?.uid else { return }
         postsCollection.order(by: "timestamp", descending: true).whereField("ownerId", isEqualTo: uid).getDocuments { (snapshot, error) in
             if let snapshot = snapshot {
                 let posts = snapshot.documents.map { Post(postId: $0.documentID, dictionary: $0.data()) }

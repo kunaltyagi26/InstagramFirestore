@@ -17,6 +17,7 @@ class FeedController: UICollectionViewController {
     // MARK: - Properties
     
     var posts: [Post] = [Post]()
+    var selectedPost: Post?
     
     var refreshControl = UIRefreshControl()
     
@@ -50,9 +51,11 @@ class FeedController: UICollectionViewController {
     func configureCollectionView() {
         self.navigationItem.title = "Feed"
         self.view.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
-        self.collectionView.backgroundColor = UIColor(named: "background")
-        self.showLogoutButton()
-        self.showMessageButton()
+        self.collectionView.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
+        if selectedPost == nil {
+            self.showLogoutButton()
+            self.showMessageButton()
+        }
         
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
@@ -76,6 +79,7 @@ class FeedController: UICollectionViewController {
     // MARK: - API
     
     func getData() {
+        guard selectedPost == nil else { return }
         FeedController.activityIndicator = self.showActivityIndicator()
         PostService.fetchFeedPosts { (result) in
             DispatchQueue.main.async {
@@ -115,12 +119,17 @@ class FeedController: UICollectionViewController {
 
 extension FeedController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return posts.count
+        return selectedPost == nil ? posts.count : 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? FeedCell else { return UICollectionViewCell() }
-        cell.viewModel = PostViewModel(post: posts[indexPath.row])
+        cell.delegate = self
+        if selectedPost == nil {
+            cell.viewModel = PostViewModel(post: posts[indexPath.row])
+        } else if let selectedPost = selectedPost {
+            cell.viewModel = PostViewModel(post: selectedPost)
+        }
         return cell
     }
 }
@@ -136,5 +145,20 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 24.0
+    }
+}
+
+// MARK: - FeedCellDelegate
+
+extension FeedController: FeedCellDelegate {
+    func handleUsernameClicked(viewModel: PostViewModel?) {
+        let profileLayout = UICollectionViewFlowLayout()
+        let profileController = ProfileController(collectionViewLayout: profileLayout)
+        if let user = self.users?[indexPath.row] {
+            profileController.user = user
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(profileController, animated: true)
+            }
+        }
     }
 }

@@ -27,7 +27,6 @@ class ProfileController: UICollectionViewController {
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Post>
     
     private lazy var dataSource = makeDataSource()
-    private var uploadedImages = [UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!), UploadedImage(image: UIImage(named: "venom-7")!)]
     
     var user: User?
     var posts: [Post] = []
@@ -48,7 +47,7 @@ class ProfileController: UICollectionViewController {
         ProfileController.activityIndicator = self.showActivityIndicator()
         
         dispatchGroup.enter()
-        UserService.getStats(uid: user?.uid ?? Auth.auth().currentUser?.uid) { (result) in
+        UserService.getStats(uid: user?.uid ?? "") { (result) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let userStats):
@@ -67,7 +66,7 @@ class ProfileController: UICollectionViewController {
         }
         
         dispatchGroup.enter()
-        PostService.fetchProfilePosts { (result) in
+        PostService.fetchProfilePosts(for: user?.uid ?? "") { (result) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let posts):
@@ -105,7 +104,7 @@ class ProfileController: UICollectionViewController {
     // MARK: - Helpers
     
     func configureView() {
-        self.navigationItem.title = "Profile"
+        self.navigationItem.title = user?.username
         self.view.backgroundColor = UIColor(named: "background")
         configureCollectionView()
     }
@@ -125,7 +124,8 @@ class ProfileController: UICollectionViewController {
           let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: profileCellReuseIdentifier,
             for: indexPath) as? ProfileCell
-            cell?.setImage(url: URL(string: post.imageUrl)!)
+            //cell?.setImage(url: URL(string: post.imageUrl)!)
+            cell?.viewModel = PostViewModel(post: post)
           return cell
       })
         
@@ -154,6 +154,18 @@ class ProfileController: UICollectionViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegate
+
+extension ProfileController {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
+        feedController.selectedPost = posts[indexPath.row]
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(feedController, animated: true)
+        }
+    }
+}
+
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension ProfileController: UICollectionViewDelegateFlowLayout {
@@ -174,6 +186,8 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: collectionView.frame.width, height: 228)
     }
 }
+
+// MARK: - ProfileHeaderDelegate
 
 extension ProfileController: ProfileHeaderDelegate {
     func header(_ profileHeader: ProfileHeader, didTapActionButtonFor user: User) {
