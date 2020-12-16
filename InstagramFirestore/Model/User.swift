@@ -22,6 +22,14 @@ struct User: Codable {
         return Auth.auth().currentUser?.uid == uid
     }
     
+    init() {
+        self.uid = ""
+        self.email = ""
+        self.username = ""
+        self.fullName = ""
+        self.profileImageUrl = ""
+    }
+    
     init(dictionary: [String:Any]) {
         self.uid = dictionary["uid"] as? String ?? ""
         self.email = dictionary["email"] as? String ?? ""

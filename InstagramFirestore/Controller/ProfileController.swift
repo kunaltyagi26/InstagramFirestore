@@ -53,47 +53,48 @@ class ProfileController: UICollectionViewController {
     func getData() {
         ProfileController.activityIndicator = self.showActivityIndicator()
         
-        let operation1 = BlockOperation {
-            if let selectedUserId = self.selectedUserId {
-                self.dispatchGroup.enter()
-                
-                UserService.fetchUser(uid: selectedUserId) { (result) in
-                    switch result {
-                    case .success(let user):
-                        self.user = user
-                    case .failure(let error):
-                        self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: error.localizedDescription)
-                    }
-                    self.dispatchGroup.leave()
-                    
-                }
+        fetchUserData()
+        fetchUserFollowDetail()
+        fetchUserStats()
+        fetchProfilePosts()
+        
+        dispatchGroup.notify(queue: .main) {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: "Success", andTime: 0.5)
             }
         }
-        
-        let operation2 = BlockOperation {
+    }
+    
+    // MARK: - API
+    
+    func fetchUserData() {
+        if let selectedUserId = self.selectedUserId {
             self.dispatchGroup.enter()
-            UserService.checkIfUserIsFollowed(uid: self.user?.uid ?? self.selectedUserId) { (isFollowed) in
-                DispatchQueue.main.async {
-                    self.user?.isFollowed = isFollowed
-                    self.dispatchGroup.leave()
+            UserService.fetchUser(uid: selectedUserId) { (result) in
+                switch result {
+                case .success(let user):
+                    self.user = user
+                case .failure(let error):
+                    self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: error.localizedDescription)
                 }
+                self.dispatchGroup.leave()
                 
             }
         }
-        
-        if selectedUserId != nil {
-            operation2.addDependency(operation1)
+    }
+    
+    func fetchUserFollowDetail() {
+        self.dispatchGroup.enter()
+        UserService.checkIfUserIsFollowed(uid: self.user?.uid ?? self.selectedUserId) { (isFollowed) in
+            DispatchQueue.main.async {
+                self.user?.isFollowed = isFollowed
+                self.dispatchGroup.leave()
+            }
         }
-        
-        let operationQueue = OperationQueue()
-        
-        if selectedUserId != nil {
-            operationQueue.addOperation(operation1)
-            operationQueue.waitUntilAllOperationsAreFinished()
-        }
-        
-        operationQueue.addOperation(operation2)
-        
+    }
+    
+    func fetchUserStats() {
         self.dispatchGroup.enter()
         UserService.getStats(uid: self.user?.uid ?? self.selectedUserId) { (result) in
             DispatchQueue.main.async {
@@ -106,7 +107,9 @@ class ProfileController: UICollectionViewController {
                 self.dispatchGroup.leave()
             }
         }
-        
+    }
+    
+    func fetchProfilePosts() {
         dispatchGroup.enter()
         PostService.fetchProfilePosts(for: (user?.uid ?? selectedUserId) ?? "") { (result) in
             DispatchQueue.main.async {
@@ -118,13 +121,6 @@ class ProfileController: UICollectionViewController {
                     print(error)
                 }
                 self.dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-                self.showFinalizedActivityIndicator(for: ProfileController.activityIndicator, withMessage: "Success", andTime: 0.5)
             }
         }
     }
