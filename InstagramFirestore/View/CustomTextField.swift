@@ -8,14 +8,14 @@
 import UIKit
 
 class CustomTextField: UITextField {
-    init(placeholder: String) {
+    init(placeholder: String, textColor: UIColor = .systemBackground) {
         super.init(frame: .zero)
         
         borderStyle = .none
-        textColor = .systemBackground
+        self.textColor = textColor
         keyboardType = .emailAddress
         backgroundColor = UIColor.systemBackground.withAlphaComponent(0.1)
-        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: UIColor.systemBackground.withAlphaComponent(0.7)])
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: textColor.withAlphaComponent(0.7)])
         layer.cornerRadius = 10
         
         setHeight(50)

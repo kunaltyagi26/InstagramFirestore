@@ -8,7 +8,8 @@
 import UIKit
 
 protocol FeedCellDelegate: AnyObject {
-    func handleUsernameClicked(viewModel: PostViewModel?)
+    func handleUsernameClicked(ownerId: String?)
+    func handleCommentClicked(ownerId: String?)
 }
 
 class FeedCell: UICollectionViewCell {
@@ -137,7 +138,7 @@ class FeedCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc func didTapUsername() {
-        delegate?.handleUsernameClicked(viewModel: viewModel)
+        delegate?.handleUsernameClicked(ownerId: viewModel?.ownerId)
     }
     
     @objc func didTapLike() {
@@ -145,7 +146,7 @@ class FeedCell: UICollectionViewCell {
     }
     
     @objc func didTapComment() {
-        
+        delegate?.handleCommentClicked(ownerId: viewModel?.ownerId)
     }
     
     @objc func didTapShare() {

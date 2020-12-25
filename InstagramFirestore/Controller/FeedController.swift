@@ -51,7 +51,8 @@ class FeedController: UICollectionViewController {
     func configureCollectionView() {
         self.navigationItem.title = "Feed"
         self.view.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
-        self.collectionView.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
+        self.collectionView.backgroundColor = UIColor(named: "background")
+        
         if selectedPost == nil {
             self.showLogoutButton()
             self.showMessageButton()
@@ -61,11 +62,11 @@ class FeedController: UICollectionViewController {
         collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         self.collectionView.showsVerticalScrollIndicator = false
         
-        self.collectionView.alwaysBounceVertical = true
-        self.collectionView.refreshControl = refreshControl
-        self.refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
-        
-        //configureNoFeedsView()
+        if selectedPost == nil {
+            self.collectionView.alwaysBounceVertical = true
+            self.collectionView.refreshControl = refreshControl
+            self.refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
+        }
     }
     
     func configureNoFeedsView() {
@@ -96,8 +97,8 @@ class FeedController: UICollectionViewController {
                             self.posts = posts
                             self.collectionView.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
                         }
-                        self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: "Success", andTime: 0.5)
                         self.collectionView.reloadData()
+                        self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: "Success", andTime: 0.5)
                     case .failure(let error):
                         self.collectionView.backgroundView = self.noFeedsLabel
                         self.collectionView.backgroundColor = UIColor(named: "background")
@@ -151,12 +152,19 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
 // MARK: - FeedCellDelegate
 
 extension FeedController: FeedCellDelegate {
-    func handleUsernameClicked(viewModel: PostViewModel?) {
+    func handleUsernameClicked(ownerId: String?) {
         let profileLayout = UICollectionViewFlowLayout()
         let profileController = ProfileController(collectionViewLayout: profileLayout)
-        profileController.selectedUserId = viewModel?.ownerId
+        profileController.selectedUserId = ownerId
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(profileController, animated: true)
+        }
+    }
+    
+    func handleCommentClicked(ownerId: String?) {
+        let commentsController = CommentsController()
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(commentsController, animated: true)
         }
     }
 }

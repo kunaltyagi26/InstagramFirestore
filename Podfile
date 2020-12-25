@@ -12,7 +12,6 @@ target 'InstagramFirestore' do
   pod 'Firebase/Storage'
   pod 'Firebase/Core'
   pod 'Firebase/Database'
-  pod 'Firebase/Messaging'
   pod 'ActiveLabel'
   pod 'SDWebImage'
   pod 'JGProgressHUD'

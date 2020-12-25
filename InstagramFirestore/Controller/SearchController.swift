@@ -50,7 +50,6 @@ class SearchController: UITableViewController {
         self.tableView.backgroundColor = UIColor(named: "background")
         configureTableView()
         configureSearchController()
-        
     }
     
     func configureTableView() {
