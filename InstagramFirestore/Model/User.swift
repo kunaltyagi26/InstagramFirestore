@@ -30,6 +30,14 @@ struct User: Codable {
         self.profileImageUrl = ""
     }
     
+    init(uid: String, email: String, username: String, fullName: String, profileImageUrl: String) {
+        self.uid = uid
+        self.email = email
+        self.username = username
+        self.fullName = fullName
+        self.profileImageUrl = profileImageUrl
+    }
+    
     init(dictionary: [String:Any]) {
         self.uid = dictionary["uid"] as? String ?? ""
         self.email = dictionary["email"] as? String ?? ""

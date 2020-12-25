@@ -36,6 +36,8 @@
 		2B76093E256CEDA10007C579 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B76093D256CEDA10007C579 /* ImageUploader.swift */; };
 		2B760941256FDF200007C579 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B760940256FDF1F0007C579 /* Reachability.swift */; };
 		2B760964256FE44B0007C579 /* UIViewController + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */; };
+		2BAE3AD325965EB30019D4A8 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD225965EB30019D4A8 /* CommentService.swift */; };
+		2BAE3AD62596622C0019D4A8 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD52596622C0019D4A8 /* LoginManager.swift */; };
 		2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */; };
 		2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92A2572403800292090 /* ProfileCell.swift */; };
 		2BC9ABD7257250770074C890 /* ProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92D2572404600292090 /* ProfileHeader.swift */; };
@@ -84,6 +86,8 @@
 		2B76093D256CEDA10007C579 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		2B760940256FDF1F0007C579 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extensions.swift"; sourceTree = "<group>"; };
+		2BAE3AD225965EB30019D4A8 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
+		2BAE3AD52596622C0019D4A8 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthErrorCode + Extensions.swift"; sourceTree = "<group>"; };
 		2BB6C92A2572403800292090 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		2BB6C92D2572404600292090 /* ProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeader.swift; sourceTree = "<group>"; };
@@ -160,6 +164,7 @@
 				2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */,
 				2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */,
 				2BC9AC212574D5950074C890 /* Constants.swift */,
+				2BAE3AD52596622C0019D4A8 /* LoginManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -171,6 +176,7 @@
 				2B76093D256CEDA10007C579 /* ImageUploader.swift */,
 				2BC9AC1E257394FD0074C890 /* UserService.swift */,
 				2B72FBA52581442200D64C4B /* PostService.swift */,
+				2BAE3AD225965EB30019D4A8 /* CommentService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -401,11 +407,13 @@
 				2B7608F5256963B30007C579 /* FeedCell.swift in Sources */,
 				2BC9ABD7257250770074C890 /* ProfileHeader.swift in Sources */,
 				2B7608E32568F26B0007C579 /* SearchController.swift in Sources */,
+				2BAE3AD325965EB30019D4A8 /* CommentService.swift in Sources */,
 				2B7608BF2568EE100007C579 /* AppDelegate.swift in Sources */,
 				2B7608E02568F25A0007C579 /* FeedController.swift in Sources */,
 				2B72FBA92584A41200D64C4B /* Post.swift in Sources */,
 				2B7608F2256949200007C579 /* CustomTabBar.swift in Sources */,
 				2B760964256FE44B0007C579 /* UIViewController + Extensions.swift in Sources */,
+				2BAE3AD62596622C0019D4A8 /* LoginManager.swift in Sources */,
 				2B7608EC2568F2A30007C579 /* ProfileController.swift in Sources */,
 				2B7608DC2568EF050007C579 /* MainTabController.swift in Sources */,
 				2B72FBAC2584ABE900D64C4B /* PostViewModel.swift in Sources */,

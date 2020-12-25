@@ -161,8 +161,9 @@ extension FeedController: FeedCellDelegate {
         }
     }
     
-    func handleCommentClicked(ownerId: String?) {
+    func handleCommentClicked(postId: String?) {
         let commentsController = CommentsController()
+        commentsController.postId = postId
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(commentsController, animated: true)
         }

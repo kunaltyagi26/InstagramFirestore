@@ -19,7 +19,7 @@ struct Post: Hashable {
     let ownerFullName: String
     
     init(postId: String, dictionary: [String:Any]) {
-        self.id = dictionary["imageUrl"] as? String ?? ""
+        self.id = postId
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
         self.caption = dictionary["caption"] as? String ?? ""
         self.likes = dictionary["likes"] as? Int ?? 0

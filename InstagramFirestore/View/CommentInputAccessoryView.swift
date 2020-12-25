@@ -7,16 +7,22 @@
 
 import UIKit
 
+protocol CommentInputAccessoryViewDelegate: AnyObject {
+    func inputView(_ inputView: CommentInputAccessoryView, wantsToUploadComment comment: String)
+}
+
 class CommentInputAccessoryView: UIView {
     
     // MARK: - Properties
+    
+    weak var delegate: CommentInputAccessoryViewDelegate?
     
     private let bottomView: UIView = {
         let view = UIView()
         return view
     }()
     
-    let postTextField: CustomTextField = {
+    let commentTextField: CustomTextField = {
         let tf = CustomTextField(placeholder: "Enter Comment", textColor: .label)
         tf.font = UIFont.systemFont(ofSize: 15)
         return tf
@@ -54,19 +60,27 @@ class CommentInputAccessoryView: UIView {
         addSubview(divider)
         divider.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 0.5)
         
-        addSubview(postTextField)
-        postTextField.anchor(top: divider.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, paddingLeft: 12, paddingBottom: 12)
-        postTextField.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.80).isActive = true
+        addSubview(commentTextField)
+        commentTextField.anchor(top: divider.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, paddingLeft: 12, paddingBottom: 12)
+        commentTextField.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.80).isActive = true
         
         addSubview(postButton)
-        postButton.anchor(left: postTextField.rightAnchor, right: rightAnchor, paddingLeft: 0, paddingRight: 12)
-        postButton.centerY(inView: postTextField)
+        postButton.anchor(left: commentTextField.rightAnchor, right: rightAnchor, paddingLeft: 0, paddingRight: 12)
+        postButton.centerY(inView: commentTextField)
+    }
+    
+    func clearCommentText() {
+        commentTextField.text = nil
     }
     
     // MARK: - Actions
     
     @objc func didTapPost() {
-        
+        guard let text = commentTextField.text else { return }
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedText != "" {
+            delegate?.inputView(self, wantsToUploadComment: trimmedText)
+        }
     }
 }
 

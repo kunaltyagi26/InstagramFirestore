@@ -14,6 +14,10 @@ struct PostViewModel {
         self.post = post
     }
     
+    var postId: String {
+        return post.id
+    }
+    
     var ownerId: String {
         return post.ownerId
     }

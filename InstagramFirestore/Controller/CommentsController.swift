@@ -16,9 +16,12 @@ class CommentsController: UIViewController {
     
     private let tableView = UITableView()
     
+    var postId: String?
+    
     private lazy var commentInputView: CommentInputAccessoryView = {
         let frame = CGRect(x: 0, y: 0, width: view.frame.height, height: 62.5)
         let cv = CommentInputAccessoryView(frame: frame)
+        cv.delegate = self
         return cv
     }()
     
@@ -58,7 +61,7 @@ class CommentsController: UIViewController {
         self.tableView.backgroundColor = UIColor(named: "background")
         self.tabBarController?.tabBar.isHidden = true
         
-        commentInputView.postTextField.delegate = self
+        commentInputView.commentTextField.delegate = self
         
         setConstraintsForView()
         configureTableView()
@@ -100,6 +103,8 @@ extension CommentsController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: - UITextViewDelegate
+
 extension CommentsController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
         print("came in this method.")
@@ -109,6 +114,8 @@ extension CommentsController: UITextViewDelegate {
         return false
     }
 }
+
+// MARK: - UITextFieldDelegate
 
 extension CommentsController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -122,5 +129,23 @@ extension CommentsController: UITextFieldDelegate {
             commentInputView.postButton.isUserInteractionEnabled = false
         }
         return true
+    }
+}
+
+// MARK: - CommentInputAccessoryViewDelegate
+
+extension CommentsController: CommentInputAccessoryViewDelegate {
+    func inputView(_ inputView: CommentInputAccessoryView, wantsToUploadComment comment: String) {
+        guard let postId = postId else { return }
+        CommentsController.activityIndicator = self.showActivityIndicator()
+        let currentUser = User(uid: LoginManager.shared.uid, email: LoginManager.shared.email, username: LoginManager.shared.username, fullName: LoginManager.shared.fullName, profileImageUrl: LoginManager.shared.profileImageUrl)
+        CommentService.uploadComment(comment: comment, postId: postId, user: currentUser) { (error) in
+            if let error = error {
+                self.showFinalizedActivityIndicator(for: UploadPostController.activityIndicator, withMessage: error.localizedDescription)
+            } else {
+                inputView.clearCommentText()
+                self.showFinalizedActivityIndicator(for: UploadPostController.activityIndicator, withMessage: "Success", andTime: 0.5)
+            }
+        }
     }
 }

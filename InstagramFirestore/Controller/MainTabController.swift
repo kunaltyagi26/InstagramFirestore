@@ -68,6 +68,7 @@ class MainTabController: UITabBarController {
                 switch result {
                 case .success(let user):
                     self.user = user
+                    LoginManager.shared.saveUserDetails(for: user)
                 case .failure(let error):
                     print(error)
                 }
