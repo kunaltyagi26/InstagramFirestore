@@ -19,7 +19,14 @@ struct CommentService {
         postsCollection.document(postId).collection("comments").addDocument(data: data, completion: completion)
     }
     
-    static func fetchComment() {
-        
+    static func fetchComment(postId: String, completion: @escaping(Result<[Comment], Error>)-> Void) {
+        postsCollection.document(postId).collection("comments").getDocuments { (snapshot, error) in
+            if let snapshot = snapshot {
+                let comments = snapshot.documents.map { Comment(dictionary: $0.data()) }
+                completion(.success(comments))
+            } else if let error = error {
+                completion(.failure(error))
+            }
+        }
     }
 }

@@ -38,6 +38,7 @@
 		2B760964256FE44B0007C579 /* UIViewController + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */; };
 		2BAE3AD325965EB30019D4A8 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD225965EB30019D4A8 /* CommentService.swift */; };
 		2BAE3AD62596622C0019D4A8 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD52596622C0019D4A8 /* LoginManager.swift */; };
+		2BAE3AD9259770700019D4A8 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD8259770700019D4A8 /* Comment.swift */; };
 		2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */; };
 		2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92A2572403800292090 /* ProfileCell.swift */; };
 		2BC9ABD7257250770074C890 /* ProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92D2572404600292090 /* ProfileHeader.swift */; };
@@ -88,6 +89,7 @@
 		2B760963256FE44B0007C579 /* UIViewController + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extensions.swift"; sourceTree = "<group>"; };
 		2BAE3AD225965EB30019D4A8 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
 		2BAE3AD52596622C0019D4A8 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
+		2BAE3AD8259770700019D4A8 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthErrorCode + Extensions.swift"; sourceTree = "<group>"; };
 		2BB6C92A2572403800292090 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		2BB6C92D2572404600292090 /* ProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeader.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 			children = (
 				2BC9AC242574D7990074C890 /* User.swift */,
 				2B72FBA82584A41200D64C4B /* Post.swift */,
+				2BAE3AD8259770700019D4A8 /* Comment.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				2B72FBA3257FF6A100D64C4B /* CustomTextView.swift in Sources */,
 				2BC9AC2F257566CC0074C890 /* UserCellViewModel.swift in Sources */,
 				2BC9AC282574F40E0074C890 /* ProfileHeaderViewModel.swift in Sources */,
+				2BAE3AD9259770700019D4A8 /* Comment.swift in Sources */,
 				2BE3608F258BBE9500449F2B /* CommentCell.swift in Sources */,
 				2B7608FD256A39820007C579 /* LoginController.swift in Sources */,
 				2BC9AC1F257394FE0074C890 /* UserService.swift in Sources */,

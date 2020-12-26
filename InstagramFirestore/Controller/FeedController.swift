@@ -164,6 +164,7 @@ extension FeedController: FeedCellDelegate {
     func handleCommentClicked(postId: String?) {
         let commentsController = CommentsController()
         commentsController.postId = postId
+        commentsController.hidesBottomBarWhenPushed = true
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(commentsController, animated: true)
         }

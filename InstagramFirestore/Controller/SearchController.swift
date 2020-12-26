@@ -59,6 +59,7 @@ class SearchController: UITableViewController {
         self.tableView.estimatedRowHeight = 60.0
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        self.tableView.keyboardDismissMode = .onDrag
     }
     
     func configureSearchController() {

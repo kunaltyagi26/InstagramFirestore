@@ -13,7 +13,7 @@ class CommentCell: UITableViewCell {
     
     private let outerProfileImageView: UIView = {
         let outerView = UIView()
-        outerView.applyshadowWithCorner(cornerRadius: 40 / 2, shadowRadius: 3, shadowOffset: CGSize(width: 3.0, height: 3.0), shadowOpacity: 1.0)
+        outerView.applyshadowWithCorner(cornerRadius: 30 / 2, shadowRadius: 3, shadowOffset: CGSize(width: 3.0, height: 3.0), shadowOpacity: 1.0)
         return outerView
     }()
     
@@ -23,8 +23,7 @@ class CommentCell: UITableViewCell {
         iv.backgroundColor = .systemGray2
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.layer.cornerRadius = 40 / 2
-        iv.image = #imageLiteral(resourceName: "venom-7")
+        iv.layer.cornerRadius = 30 / 2
         return iv
     }()
     
@@ -55,19 +54,21 @@ class CommentCell: UITableViewCell {
     func setupView() {
         self.addSubview(commentTextView)
         commentTextView.anchor(top: topAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 8, paddingBottom: 8, paddingRight: 12)
-        commentTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60).isActive = true
+        commentTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
         
         self.addSubview(outerProfileImageView)
         outerProfileImageView.centerY(inView: commentTextView)
-        outerProfileImageView.anchor(left: leftAnchor, right: commentTextView.leftAnchor, paddingLeft: 12, paddingRight: 12, width: 40, height: 40)
+        outerProfileImageView.anchor(left: leftAnchor, right: commentTextView.leftAnchor, paddingLeft: 12, paddingRight: 12, width: 30, height: 30)
         
         outerProfileImageView.addSubview(profileImageView)
         profileImageView.anchor(top: outerProfileImageView.topAnchor, left: outerProfileImageView.leftAnchor, bottom: outerProfileImageView.bottomAnchor, right: outerProfileImageView.rightAnchor)
+    }
+    
+    func populateComment(comment: Comment) {
+        self.profileImageView.sd_setImage(with: URL(string: comment.profileImageUrl), completed: nil)
         
-        //commentTextView.delegate = self
-        
-        let username = "Venom"
-        let comment = "By the Joker By the Joker By the Joker By the Joker By the Joker By the Joker By the Joker By the Joker By the Joker By the Joker By the Joker"
+        let username = comment.username
+        let comment = comment.comment
         let cellText = username + " " + comment
         commentTextView.text = cellText
         commentTextView.font = UIFont.systemFont(ofSize: 18)
@@ -78,7 +79,7 @@ class CommentCell: UITableViewCell {
             
             let nameAttributes: [NSAttributedString.Key : Any] = [
                         NSAttributedString.Key.foregroundColor: UIColor.label,
-                        NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16),
+                        NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17),
                         NSAttributedString.Key.link: url
             ]
             let commentAttributes = [
@@ -101,17 +102,6 @@ class CommentCell: UITableViewCell {
         }
     }
 }
-
-extension CommentCell: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        print("came in this method.")
-        if (URL.absoluteString == "https://www.apple.com") {
-            UIApplication.shared.open(URL, options: [:], completionHandler: nil)
-        }
-        return false
-    }
-}
-
 
 extension NSMutableAttributedString {
     func setFontFace(font: UIFont, color: UIColor? = nil) {

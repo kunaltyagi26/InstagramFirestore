@@ -17,6 +17,7 @@ class CommentsController: UIViewController {
     private let tableView = UITableView()
     
     var postId: String?
+    var comments: [Comment] = []
     
     private lazy var commentInputView: CommentInputAccessoryView = {
         let frame = CGRect(x: 0, y: 0, width: view.frame.height, height: 62.5)
@@ -41,6 +42,7 @@ class CommentsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        fetchComments()
     }
     
     override var inputAccessoryView: UIView? {
@@ -53,13 +55,25 @@ class CommentsController: UIViewController {
     
     // MARK: - API
     
+    func fetchComments() {
+        guard let postId = postId else { return }
+        CommentService.fetchComment(postId: postId) { (result) in
+            switch result {
+                case .success(let comments):
+                    self.comments = comments
+                    self.tableView.reloadData()
+                case .failure(let error):
+                    print(error)
+            }
+        }
+    }
+    
     // MARK: - Helpers
     
     func configureView() {
         self.navigationItem.title = "Comments"
         self.view.backgroundColor = UIColor(named: "background")
         self.tableView.backgroundColor = UIColor(named: "background")
-        self.tabBarController?.tabBar.isHidden = true
         
         commentInputView.commentTextField.delegate = self
         
@@ -79,19 +93,20 @@ class CommentsController: UIViewController {
         self.tableView.estimatedRowHeight = 45.0
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        self.tableView.separatorStyle = .none
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.alwaysBounceVertical = true
-        self.tableView.keyboardDismissMode = .interactive
+        self.tableView.keyboardDismissMode = .onDrag
     }
     
     // MARK: - Actions
-    
+
 }
 
 extension CommentsController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return comments.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -99,6 +114,7 @@ extension CommentsController: UITableViewDelegate, UITableViewDataSource {
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         cell.commentTextView.delegate = self
+        cell.populateComment(comment: comments[indexPath.row])
         return cell
     }
 }
@@ -144,6 +160,7 @@ extension CommentsController: CommentInputAccessoryViewDelegate {
                 self.showFinalizedActivityIndicator(for: UploadPostController.activityIndicator, withMessage: error.localizedDescription)
             } else {
                 inputView.clearCommentText()
+                self.fetchComments()
                 self.showFinalizedActivityIndicator(for: UploadPostController.activityIndicator, withMessage: "Success", andTime: 0.5)
             }
         }
