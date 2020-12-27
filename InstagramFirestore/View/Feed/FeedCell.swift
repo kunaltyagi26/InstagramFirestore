@@ -10,6 +10,7 @@ import UIKit
 protocol FeedCellDelegate: AnyObject {
     func handleUsernameClicked(ownerId: String?)
     func handleCommentClicked(postId: String?)
+    func handleLikeClicked(for cell: FeedCell, post: Post)
 }
 
 class FeedCell: UICollectionViewCell {
@@ -70,7 +71,7 @@ class FeedCell: UICollectionViewCell {
         return iv
     }()
     
-    private lazy var likeButton: UIButton = {
+    lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "heart"), for: .normal)
         button.tintColor = .label
@@ -142,7 +143,9 @@ class FeedCell: UICollectionViewCell {
     }
     
     @objc func didTapLike() {
-        
+        guard let viewModel = viewModel else { return }
+        delegate?.handleLikeClicked(for: self, post: viewModel.post)
+        //delegate?.handleLikeClicked(for: self, postId: viewModel.postId, numberOfLikes: likeButton.image(for: .normal) == UIImage(systemName: "heart") ? Int(viewModel.likes) ?? 0 + 1 : Int(viewModel.likes) ?? 0 - 1)
     }
     
     @objc func didTapComment() {
@@ -220,6 +223,11 @@ class FeedCell: UICollectionViewCell {
             self.usernameButton.setTitle(viewModel.userFullName, for: .normal)
             self.likesLabel.text = "\(viewModel.likes)"
             self.postTimeLabel.text = "\(viewModel.timestamp)"
+            UIView.transition(with: self.likeButton.imageView ?? UIImageView(),
+                              duration: 0.3,
+                              options: .transitionCrossDissolve,
+                              animations: { self.likeButton.setImage(viewModel.didLike ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.systemRed) : UIImage(systemName: "heart"), for: .normal) },
+                              completion: nil)
         }
     }
 }

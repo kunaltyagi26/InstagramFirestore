@@ -8,7 +8,7 @@
 import Foundation
 
 struct PostViewModel {
-    private let post: Post
+    var post: Post
     
     init(post: Post) {
         self.post = post
@@ -79,6 +79,26 @@ struct PostViewModel {
             }
         } else  {
             return "\(timeInSeconds) second ago"
+        }
+    }
+    
+    var didLike: Bool {
+        get {
+            return post.didLike
+        }
+        set {
+            self.post.didLike = newValue
+            if newValue {
+                self.post.likes += 1
+            } else {
+                self.post.likes -= 1
+            }
+        }
+    }
+    
+    func didUserLikedThePost(completion: @escaping(Bool)-> Void) {
+        PostService.checkIfUserLikedThePost(postId: post.id) { (didLike) in
+            completion(didLike)
         }
     }
 }

@@ -12,11 +12,12 @@ struct Post: Hashable {
     let id: String
     let imageUrl: String
     let caption: String
-    let likes: Int
+    var likes: Int
     let ownerId: String
     let timestamp: Timestamp
     let ownerProfilePicture: String
     let ownerFullName: String
+    var didLike: Bool = false
     
     init(postId: String, dictionary: [String:Any]) {
         self.id = postId

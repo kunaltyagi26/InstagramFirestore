@@ -16,7 +16,11 @@ class FeedController: UICollectionViewController {
     
     // MARK: - Properties
     
-    var posts: [Post] = [Post]()
+    var posts: [Post] = [Post]() {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
     var selectedPost: Post?
     
     var refreshControl = UIRefreshControl()
@@ -94,17 +98,29 @@ class FeedController: UICollectionViewController {
                         if posts.count == 0 {
                             self.collectionView.backgroundView = self.noFeedsLabel
                             self.collectionView.backgroundColor = UIColor(named: "background")
+                            self.collectionView.reloadData()
+                            self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: "Success", andTime: 0.5)
                         } else {
                             self.collectionView.backgroundView = nil
                             self.posts = posts
+                            self.checkIfUserLikedPost()
                             self.collectionView.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
+                            self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: "Success", andTime: 0.5)
                         }
-                        self.collectionView.reloadData()
-                        self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: "Success", andTime: 0.5)
                     case .failure(let error):
                         self.collectionView.backgroundView = self.noFeedsLabel
                         self.collectionView.backgroundColor = UIColor(named: "background")
                         self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func checkIfUserLikedPost() {
+        self.posts.forEach { (post) in
+            PostService.checkIfUserLikedThePost(postId: post.id) { (didLike) in
+                if let index = self.posts.firstIndex(where: { $0.id == post.id }) {
+                    self.posts[index].didLike = didLike
                 }
             }
         }
@@ -130,6 +146,9 @@ extension FeedController {
         cell.delegate = self
         if selectedPost == nil {
             cell.viewModel = PostViewModel(post: posts[indexPath.row])
+            PostService.checkIfUserLikedThePost(postId: posts[indexPath.row].id) { (didLike) in
+                //cell.viewModel?.didLike = didLike
+            }
         } else if let selectedPost = selectedPost {
             cell.viewModel = PostViewModel(post: selectedPost)
         }
@@ -170,5 +189,33 @@ extension FeedController: FeedCellDelegate {
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(commentsController, animated: true)
         }
+    }
+    
+    func handleLikeClicked(for cell: FeedCell, post: Post) {
+        cell.viewModel?.didLike.toggle()
+        
+        if post.didLike {
+            PostService.unlikePost(post: post) { (error) in
+                if let error = error {
+                    self.updateCellAndShowError(cell: cell, error: error)
+                }
+            }
+        } else {
+            PostService.likePost(post: post) { (error) in
+                if let error = error {
+                    self.updateCellAndShowError(cell: cell, error: error)
+                }
+            }
+        }
+    }
+    
+    func updateCellAndShowError(cell: FeedCell, error: Error) {
+        cell.viewModel?.didLike.toggle()
+        UIView.transition(with: cell.likeButton.imageView ?? UIImageView(),
+                          duration: 0.3,
+                          options: .transitionCrossDissolve,
+                          animations: { cell.likeButton.setImage(cell.viewModel?.didLike ?? false ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.systemRed) : UIImage(systemName: "heart"), for: .normal) },
+                          completion: nil)
+        self.showAlert(title: "Error", message: error.localizedDescription)
     }
 }

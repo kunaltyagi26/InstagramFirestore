@@ -55,7 +55,6 @@ struct PostService {
     }
     
     static func fetchProfilePosts(for uid: String, completion: @escaping(Result<[Post], Error>) -> Void) {
-        //guard let uid = Auth.auth().currentUser?.uid else { return }
         postsCollection.order(by: "timestamp", descending: true).whereField("ownerId", isEqualTo: uid).getDocuments { (snapshot, error) in
             if let snapshot = snapshot {
                 let posts = snapshot.documents.map { Post(postId: $0.documentID, dictionary: $0.data()) }
@@ -63,6 +62,37 @@ struct PostService {
             } else if let error = error {
                 completion(.failure(error))
             }
+        }
+    }
+    
+    static func likePost(post: Post, completion: @escaping(FirebaseCompletion)) {
+        postsCollection.document(post.id).updateData(["likes" : post.likes + 1]) { (error) in
+            if let error = error {
+                completion(error)
+            } else {
+                let uid = LoginManager.shared.uid
+                postsCollection.document(post.id).collection("likes").document(uid).setData([:], completion: completion)
+            }
+        }
+    }
+    
+    static func unlikePost(post: Post, completion: @escaping(FirebaseCompletion)) {
+        guard post.likes > 0 else { return }
+        postsCollection.document(post.id).updateData(["likes" : post.likes - 1]) { (error) in
+            if let error = error {
+                completion(error)
+            } else {
+                let uid = LoginManager.shared.uid
+                postsCollection.document(post.id).collection("likes").document(uid).delete(completion: completion)
+            }
+        }
+    }
+    
+    static func checkIfUserLikedThePost(postId: String, completion: @escaping (Bool)-> Void) {
+        let uid = LoginManager.shared.uid
+        postsCollection.document(postId).collection("likes").document(uid).getDocument { (document, error) in
+            guard let isLiked = document?.exists else { return }
+            completion(isLiked)
         }
     }
 }
