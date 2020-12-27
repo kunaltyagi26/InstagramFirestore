@@ -44,12 +44,14 @@ class FeedController: UICollectionViewController {
         super.viewDidLoad()
         getData()
         configureCollectionView()
+        
     }
     
     // MARK: - Helpers
     
     func configureCollectionView() {
         self.navigationItem.title = "Feed"
+        self.navigationItem.backButtonTitle = ""
         self.view.backgroundColor = UIColor(named: "background")?.withAlphaComponent(0.4)
         self.collectionView.backgroundColor = UIColor(named: "background")
         

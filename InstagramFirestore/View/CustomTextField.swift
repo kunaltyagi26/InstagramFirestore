@@ -8,7 +8,7 @@
 import UIKit
 
 class CustomTextField: UITextField {
-    init(placeholder: String, textColor: UIColor = .systemBackground) {
+    init(placeholder: String, shouldSetHeight: Bool = true, textColor: UIColor = .systemBackground) {
         super.init(frame: .zero)
         
         borderStyle = .none
@@ -18,7 +18,9 @@ class CustomTextField: UITextField {
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: textColor.withAlphaComponent(0.7)])
         layer.cornerRadius = 10
         
-        setHeight(50)
+        if shouldSetHeight {
+            setHeight(50)
+        }
         setLeftPaddingPoints(15)
         setRightPaddingPoints(15)
     }

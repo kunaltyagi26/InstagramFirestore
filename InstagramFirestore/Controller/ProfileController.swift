@@ -131,6 +131,7 @@ class ProfileController: UICollectionViewController {
         if selectedUserId == nil {
             self.navigationItem.title = user?.username
         }
+        self.navigationItem.backButtonTitle = ""
         self.view.backgroundColor = UIColor(named: "background")
         configureCollectionView()
     }
@@ -185,6 +186,7 @@ extension ProfileController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
         feedController.selectedPost = posts[indexPath.row]
+        feedController.hidesBottomBarWhenPushed = true
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(feedController, animated: true)
         }

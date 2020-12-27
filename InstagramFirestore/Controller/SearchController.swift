@@ -46,6 +46,7 @@ class SearchController: UITableViewController {
     
     func configureView() {
         self.navigationItem.title = "Search"
+        self.navigationItem.backButtonTitle = ""
         self.view.backgroundColor = UIColor(named: "background")
         self.tableView.backgroundColor = UIColor(named: "background")
         configureTableView()
@@ -117,6 +118,7 @@ extension SearchController {
             let profileController = ProfileController(collectionViewLayout: profileLayout)
             if let user = self.users?[indexPath.row] {
                 profileController.user = user
+                profileController.hidesBottomBarWhenPushed = true
                 DispatchQueue.main.async {
                     self.navigationController?.pushViewController(profileController, animated: true)
                 }

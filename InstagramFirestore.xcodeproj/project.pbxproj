@@ -39,6 +39,8 @@
 		2BAE3AD325965EB30019D4A8 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD225965EB30019D4A8 /* CommentService.swift */; };
 		2BAE3AD62596622C0019D4A8 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD52596622C0019D4A8 /* LoginManager.swift */; };
 		2BAE3AD9259770700019D4A8 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3AD8259770700019D4A8 /* Comment.swift */; };
+		2BAE3ADC2598791E0019D4A8 /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3ADB2598791E0019D4A8 /* CommentViewModel.swift */; };
+		2BAE3ADF259893350019D4A8 /* NSMutableAttributedString + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAE3ADE259893350019D4A8 /* NSMutableAttributedString + Extensions.swift */; };
 		2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */; };
 		2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92A2572403800292090 /* ProfileCell.swift */; };
 		2BC9ABD7257250770074C890 /* ProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6C92D2572404600292090 /* ProfileHeader.swift */; };
@@ -90,6 +92,8 @@
 		2BAE3AD225965EB30019D4A8 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
 		2BAE3AD52596622C0019D4A8 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		2BAE3AD8259770700019D4A8 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		2BAE3ADB2598791E0019D4A8 /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
+		2BAE3ADE259893350019D4A8 /* NSMutableAttributedString + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString + Extensions.swift"; sourceTree = "<group>"; };
 		2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthErrorCode + Extensions.swift"; sourceTree = "<group>"; };
 		2BB6C92A2572403800292090 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		2BB6C92D2572404600292090 /* ProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeader.swift; sourceTree = "<group>"; };
@@ -167,6 +171,7 @@
 				2BB6C9272571701D00292090 /* AuthErrorCode + Extensions.swift */,
 				2BC9AC212574D5950074C890 /* Constants.swift */,
 				2BAE3AD52596622C0019D4A8 /* LoginManager.swift */,
+				2BAE3ADE259893350019D4A8 /* NSMutableAttributedString + Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 				2BC9AC272574F40D0074C890 /* ProfileHeaderViewModel.swift */,
 				2BC9AC2E257566CC0074C890 /* UserCellViewModel.swift */,
 				2B72FBAB2584ABE900D64C4B /* PostViewModel.swift */,
+				2BAE3ADB2598791E0019D4A8 /* CommentViewModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -395,6 +401,7 @@
 				2B7608E62568F27D0007C579 /* ImageSelectorController.swift in Sources */,
 				2B760903256A44990007C579 /* UITextField + Extensions.swift in Sources */,
 				2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */,
+				2BAE3ADF259893350019D4A8 /* NSMutableAttributedString + Extensions.swift in Sources */,
 				2B72FBA0257FE9E600D64C4B /* UploadPostController.swift in Sources */,
 				2B72FBA3257FF6A100D64C4B /* CustomTextView.swift in Sources */,
 				2BC9AC2F257566CC0074C890 /* UserCellViewModel.swift in Sources */,
@@ -403,6 +410,7 @@
 				2BE3608F258BBE9500449F2B /* CommentCell.swift in Sources */,
 				2B7608FD256A39820007C579 /* LoginController.swift in Sources */,
 				2BC9AC1F257394FE0074C890 /* UserService.swift in Sources */,
+				2BAE3ADC2598791E0019D4A8 /* CommentViewModel.swift in Sources */,
 				2BC9AC2B2575074C0074C890 /* UserCell.swift in Sources */,
 				2BE36092258F1E1C00449F2B /* CommentInputAccessoryView.swift in Sources */,
 				2BE3608B258BBDB600449F2B /* CommentsController.swift in Sources */,

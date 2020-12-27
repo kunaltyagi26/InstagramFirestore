@@ -56,7 +56,7 @@ class MainTabController: UITabBarController {
         self.viewControllers = [feedNavigationController, searchNavigationController, imageSelectorController, notificationsNavigationController, profileNavigationController]
         
         self.selectedIndex = 0
-        addSwipeFeature()
+        //addSwipeFeature()
         self.tabBar.tintColor = .label
         self.tabBar.barTintColor = UIColor(named: "background")?.withAlphaComponent(0.1)
     }

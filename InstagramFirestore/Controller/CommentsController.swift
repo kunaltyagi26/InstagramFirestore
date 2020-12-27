@@ -58,12 +58,14 @@ class CommentsController: UIViewController {
     func fetchComments() {
         guard let postId = postId else { return }
         CommentService.fetchComment(postId: postId) { (result) in
-            switch result {
-                case .success(let comments):
-                    self.comments = comments
-                    self.tableView.reloadData()
-                case .failure(let error):
-                    print(error)
+            DispatchQueue.main.async {
+                switch result {
+                    case .success(let comments):
+                        self.comments = comments
+                        self.tableView.reloadData()
+                    case .failure(let error):
+                        self.showAlert(title: "Error", message: error.localizedDescription)
+                }
             }
         }
     }
@@ -72,6 +74,7 @@ class CommentsController: UIViewController {
     
     func configureView() {
         self.navigationItem.title = "Comments"
+        self.navigationItem.backButtonTitle = ""
         self.view.backgroundColor = UIColor(named: "background")
         self.tableView.backgroundColor = UIColor(named: "background")
         
@@ -79,6 +82,17 @@ class CommentsController: UIViewController {
         
         setConstraintsForView()
         configureTableView()
+        setupGestures()
+    }
+    
+    func setupGestures() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func hideKeyboard() {
+        commentInputView.commentTextField.resignFirstResponder()
     }
     
     func setConstraintsForView() {
@@ -90,7 +104,7 @@ class CommentsController: UIViewController {
         self.tableView.register(CommentCell.self, forCellReuseIdentifier: commentCellReuseIdentifier)
         let footerView = UIView()
         self.tableView.tableFooterView = footerView
-        self.tableView.estimatedRowHeight = 45.0
+        self.tableView.estimatedRowHeight = 30.0
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         self.tableView.separatorStyle = .none
@@ -104,7 +118,9 @@ class CommentsController: UIViewController {
 
 }
 
-extension CommentsController: UITableViewDelegate, UITableViewDataSource {
+// MARK: - UITableViewDataSource
+
+extension CommentsController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return comments.count
     }
@@ -114,8 +130,21 @@ extension CommentsController: UITableViewDelegate, UITableViewDataSource {
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         cell.commentTextView.delegate = self
-        cell.populateComment(comment: comments[indexPath.row])
+        cell.viewModel = CommentViewModel(comment: comments[indexPath.row])
         return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension CommentsController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let profileLayout = UICollectionViewFlowLayout()
+        let profileController = ProfileController(collectionViewLayout: profileLayout)
+        profileController.selectedUserId = comments[indexPath.row].uid
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(profileController, animated: true)
+        }
     }
 }
 
@@ -153,15 +182,14 @@ extension CommentsController: UITextFieldDelegate {
 extension CommentsController: CommentInputAccessoryViewDelegate {
     func inputView(_ inputView: CommentInputAccessoryView, wantsToUploadComment comment: String) {
         guard let postId = postId else { return }
-        CommentsController.activityIndicator = self.showActivityIndicator()
+        inputView.clearCommentText()
         let currentUser = User(uid: LoginManager.shared.uid, email: LoginManager.shared.email, username: LoginManager.shared.username, fullName: LoginManager.shared.fullName, profileImageUrl: LoginManager.shared.profileImageUrl)
         CommentService.uploadComment(comment: comment, postId: postId, user: currentUser) { (error) in
             if let error = error {
-                self.showFinalizedActivityIndicator(for: UploadPostController.activityIndicator, withMessage: error.localizedDescription)
+                inputView.commentTextField.text = comment
+                self.showAlert(title: "Error", message: error.localizedDescription)
             } else {
-                inputView.clearCommentText()
-                self.fetchComments()
-                self.showFinalizedActivityIndicator(for: UploadPostController.activityIndicator, withMessage: "Success", andTime: 0.5)
+                inputView.commentTextField.resignFirstResponder()
             }
         }
     }

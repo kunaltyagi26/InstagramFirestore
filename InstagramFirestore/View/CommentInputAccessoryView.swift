@@ -16,14 +16,20 @@ class CommentInputAccessoryView: UIView {
     // MARK: - Properties
     
     weak var delegate: CommentInputAccessoryViewDelegate?
-    
-    private let bottomView: UIView = {
-        let view = UIView()
-        return view
+
+    private let divider: UIView = {
+        let divider = UIView()
+        divider.backgroundColor = .systemGray
+        divider.layer.backgroundColor = UIColor.systemGray.cgColor
+        divider.layer.shadowOpacity = 0.7
+        divider.layer.shadowRadius = 2
+        divider.layer.shadowOffset = CGSize.zero
+        divider.layer.shadowColor = UIColor.systemGray.withAlphaComponent(0.6).cgColor
+        return divider
     }()
     
     let commentTextField: CustomTextField = {
-        let tf = CustomTextField(placeholder: "Enter Comment", textColor: .label)
+        let tf = CustomTextField(placeholder: "Enter Comment", shouldSetHeight: false, textColor: .label)
         tf.font = UIFont.systemFont(ofSize: 15)
         return tf
     }()
@@ -55,8 +61,6 @@ class CommentInputAccessoryView: UIView {
         autoresizingMask = .flexibleHeight
         self.backgroundColor = UIColor(named: "background")
         
-        let divider = UIView()
-        divider.backgroundColor = .systemGray
         addSubview(divider)
         divider.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 0.5)
         
