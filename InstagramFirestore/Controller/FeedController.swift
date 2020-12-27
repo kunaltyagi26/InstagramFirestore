@@ -97,6 +97,7 @@ class FeedController: UICollectionViewController {
                     case .success(let posts):
                         if posts.count == 0 {
                             self.collectionView.backgroundView = self.noFeedsLabel
+                            self.posts = posts
                             self.collectionView.backgroundColor = UIColor(named: "background")
                             self.collectionView.reloadData()
                             self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: "Success", andTime: 0.5)

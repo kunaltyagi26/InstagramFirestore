@@ -90,7 +90,7 @@ struct UserService {
     }
     
     static func getFollowers(uid: String, completion: @escaping([String]?, Error?)-> Void) {
-        followersCollection.document(uid).collection("user-followers").getDocuments { (snapshot, error) in
+        followingCollection.document(uid).collection("user-following").getDocuments { (snapshot, error) in
             if let snapshot = snapshot {
                 let followers = snapshot.documents.reduce([], { (result, snapshot) in
                     result + [snapshot.documentID]
