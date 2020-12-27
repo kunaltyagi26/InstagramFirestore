@@ -238,13 +238,6 @@ class ProfileHeader: UICollectionReusableView {
         }
     }
     
-    func updateUIForEditProFileButton() {
-        if let isFollowed = viewModel?.user.isFollowed {
-            viewModel?.user.isFollowed = !isFollowed
-            configureData()
-        }
-    }
-    
     func highlightButton(selectedButton: UIButton) {
         let buttons = [gridButton, listButton, bookmarkButton]
         for button in buttons {
