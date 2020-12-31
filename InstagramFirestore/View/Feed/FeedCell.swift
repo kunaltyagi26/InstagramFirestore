@@ -52,7 +52,7 @@ class FeedCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         button.tintColor = .label
-        button.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapOptions), for: .touchUpInside)
         return button
     }()
     
@@ -145,7 +145,6 @@ class FeedCell: UICollectionViewCell {
     @objc func didTapLike() {
         guard let viewModel = viewModel else { return }
         delegate?.handleLikeClicked(for: self, post: viewModel.post)
-        //delegate?.handleLikeClicked(for: self, postId: viewModel.postId, numberOfLikes: likeButton.image(for: .normal) == UIImage(systemName: "heart") ? Int(viewModel.likes) ?? 0 + 1 : Int(viewModel.likes) ?? 0 - 1)
     }
     
     @objc func didTapComment() {
@@ -157,6 +156,10 @@ class FeedCell: UICollectionViewCell {
     }
     
     @objc func didTapBookmark() {
+        
+    }
+    
+    @objc func didTapOptions() {
         
     }
     

@@ -12,6 +12,12 @@ import UIKit
 
 private let reuseIdentifier = "feedCell"
 
+// MARK: - Protocol
+
+protocol FeedControllerDelegate: AnyObject {
+    func updatePost(post: Post)
+}
+
 class FeedController: UICollectionViewController {
     
     // MARK: - Properties
@@ -25,13 +31,6 @@ class FeedController: UICollectionViewController {
     
     var refreshControl = UIRefreshControl()
     
-    var noFeedsView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(named: "background")
-        view.isHidden = true
-        return view
-    }()
-    
     var noFeedsLabel: UILabel = {
         let label = UILabel()
         label.text = "No post is currently available. Please pull down to refresh."
@@ -42,13 +41,20 @@ class FeedController: UICollectionViewController {
         return label
     }()
     
+    weak var delegate: FeedControllerDelegate?
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getData()
         configureCollectionView()
-        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if let selectedPost = selectedPost {
+            delegate?.updatePost(post: selectedPost)
+        }
     }
     
     // MARK: - Helpers
@@ -73,14 +79,6 @@ class FeedController: UICollectionViewController {
             self.collectionView.refreshControl = refreshControl
             self.refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
         }
-    }
-    
-    func configureNoFeedsView() {
-        view.addSubview(noFeedsView)
-        noFeedsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
-        
-        noFeedsView.addSubview(noFeedsLabel)
-        noFeedsLabel.center(inView: noFeedsView)
     }
     
     // MARK: - API
@@ -110,6 +108,7 @@ class FeedController: UICollectionViewController {
                         }
                     case .failure(let error):
                         self.collectionView.backgroundView = self.noFeedsLabel
+                        self.collectionView.reloadData()
                         self.collectionView.backgroundColor = UIColor(named: "background")
                         self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: error.localizedDescription)
                 }
@@ -147,9 +146,6 @@ extension FeedController {
         cell.delegate = self
         if selectedPost == nil {
             cell.viewModel = PostViewModel(post: posts[indexPath.row])
-            PostService.checkIfUserLikedThePost(postId: posts[indexPath.row].id) { (didLike) in
-                //cell.viewModel?.didLike = didLike
-            }
         } else if let selectedPost = selectedPost {
             cell.viewModel = PostViewModel(post: selectedPost)
         }
@@ -199,12 +195,19 @@ extension FeedController: FeedCellDelegate {
             PostService.unlikePost(post: post) { (error) in
                 if let error = error {
                     self.updateCellAndShowError(cell: cell, error: error)
+                } else {
+                    self.selectedPost?.didLike.toggle()
+                    self.selectedPost?.likes -= 1
                 }
             }
         } else {
             PostService.likePost(post: post) { (error) in
                 if let error = error {
                     self.updateCellAndShowError(cell: cell, error: error)
+                } else {
+                    self.selectedPost?.didLike.toggle()
+                    self.selectedPost?.likes += 1
+                    NotificationService.uploadNotification(toUid: post.ownerId, type: .like, post: post)
                 }
             }
         }

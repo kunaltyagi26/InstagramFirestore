@@ -84,6 +84,5 @@ class CommentCell: UITableViewCell {
         self.commentTextView.linkTextAttributes = [
             .foregroundColor: UIColor.label
         ]
-        
     }
 }

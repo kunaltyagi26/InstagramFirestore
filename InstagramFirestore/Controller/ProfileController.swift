@@ -116,11 +116,22 @@ class ProfileController: UICollectionViewController {
                 switch result {
                 case .success(let posts):
                     self.posts = posts
+                    self.checkIfUserLikedPost()
                     self.applySnapshot(animatingDifferences: true)
                 case.failure(let error):
                     print(error)
                 }
                 self.dispatchGroup.leave()
+            }
+        }
+    }
+    
+    func checkIfUserLikedPost() {
+        self.posts.forEach { (post) in
+            PostService.checkIfUserLikedThePost(postId: post.id) { (didLike) in
+                if let index = self.posts.firstIndex(where: { $0.id == post.id }) {
+                    self.posts[index].didLike = didLike
+                }
             }
         }
     }
@@ -187,6 +198,7 @@ extension ProfileController {
         let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
         feedController.selectedPost = posts[indexPath.row]
         feedController.hidesBottomBarWhenPushed = true
+        feedController.delegate = self
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(feedController, animated: true)
         }
@@ -240,6 +252,17 @@ extension ProfileController: ProfileHeaderDelegate {
                     }
                 }
             }
+        }
+    }
+}
+
+// MARK: - FeedControllerDelegate
+
+extension ProfileController: FeedControllerDelegate {
+    func updatePost(post: Post) {
+        if let index = self.posts.firstIndex(where: { $0.id == post.id }) {
+            self.posts[index].didLike = post.didLike
+            self.posts[index].likes = post.likes
         }
     }
 }
