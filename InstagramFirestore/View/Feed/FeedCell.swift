@@ -23,6 +23,15 @@ class FeedCell: UICollectionViewCell {
         }
     }
     
+    var isSelectedPost: Bool? {
+        didSet {
+            if !(isSelectedPost ?? false) {
+                layer.cornerRadius = 30
+                self.applyshadowWithCorner(cornerRadius: 30, shadowRadius: 5, shadowOffset: CGSize(width: 5.0, height: 5.0), shadowOpacity: 0.5)
+            }
+        }
+    }
+    
     weak var delegate: FeedCellDelegate?
     
     private let outerProfileImageView: UIView = {
@@ -167,8 +176,6 @@ class FeedCell: UICollectionViewCell {
     
     func setupView() {
         backgroundColor = UIColor(named: "background")
-        layer.cornerRadius = 30
-        self.applyshadowWithCorner(cornerRadius: 30, shadowRadius: 5, shadowOffset: CGSize(width: 5.0, height: 5.0), shadowOpacity: 0.5)
         
         addSubview(outerProfileImageView)
         outerProfileImageView.anchor(top: topAnchor, left: leftAnchor, paddingTop: 12, paddingLeft: 12, width: 40, height: 40)

@@ -74,11 +74,9 @@ class FeedController: UICollectionViewController {
         collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         self.collectionView.showsVerticalScrollIndicator = false
         
-        if selectedPost == nil {
-            self.collectionView.alwaysBounceVertical = true
-            self.collectionView.refreshControl = refreshControl
-            self.refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
-        }
+        self.collectionView.alwaysBounceVertical = true
+        self.collectionView.refreshControl = refreshControl
+        self.refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
     }
     
     // MARK: - API
@@ -117,10 +115,37 @@ class FeedController: UICollectionViewController {
     }
     
     func checkIfUserLikedPost() {
-        self.posts.forEach { (post) in
-            PostService.checkIfUserLikedThePost(postId: post.id) { (didLike) in
-                if let index = self.posts.firstIndex(where: { $0.id == post.id }) {
-                    self.posts[index].didLike = didLike
+        if let selectedPost = selectedPost {
+            PostService.checkIfUserLikedThePost(postId: selectedPost.id) { (didLike) in
+                self.selectedPost?.didLike = didLike
+                self.collectionView.reloadData()
+            }
+        } else {
+            self.posts.forEach { (post) in
+                PostService.checkIfUserLikedThePost(postId: post.id) { (didLike) in
+                    if let index = self.posts.firstIndex(where: { $0.id == post.id }) {
+                        self.posts[index].didLike = didLike
+                    }
+                }
+            }
+        }
+    }
+    
+    func fetchSelectedFeed() {
+        guard let selectedPost = selectedPost else { return }
+        FeedController.activityIndicator = self.showActivityIndicator()
+        PostService.fetchSelectedPost(postId: selectedPost.id) { (result) in
+            DispatchQueue.main.async {
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+                switch result {
+                    case .success(let post):
+                        self.selectedPost = post
+                        self.checkIfUserLikedPost()
+                        self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: "Success", andTime: 0.5)
+                    case .failure(let error):
+                        self.showFinalizedActivityIndicator(for: FeedController.activityIndicator, withMessage: error.localizedDescription)
                 }
             }
         }
@@ -130,7 +155,11 @@ class FeedController: UICollectionViewController {
     
     @objc func reloadData() {
         self.refreshControl.beginRefreshing()
-        getData()
+        if selectedPost != nil {
+            fetchSelectedFeed()
+        } else {
+            getData()
+        }
     }
 }
 
@@ -145,8 +174,10 @@ extension FeedController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? FeedCell else { return UICollectionViewCell() }
         cell.delegate = self
         if selectedPost == nil {
+            cell.isSelectedPost = false
             cell.viewModel = PostViewModel(post: posts[indexPath.row])
         } else if let selectedPost = selectedPost {
+            cell.isSelectedPost = true
             cell.viewModel = PostViewModel(post: selectedPost)
         }
         return cell

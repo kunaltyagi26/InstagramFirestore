@@ -95,4 +95,15 @@ struct PostService {
             completion(isLiked)
         }
     }
+    
+    static func fetchSelectedPost(postId: String, completion: @escaping(Result<Post, Error>) -> Void) {
+        postsCollection.document(postId).getDocument { (snapshot, error) in
+            if let snapshot = snapshot, snapshot.exists, let data = snapshot.data() {
+                let post = Post(postId: snapshot.documentID, dictionary: data)
+                completion(.success(post))
+            } else if let error = error {
+                completion(.failure(error))
+            }
+        }
+    }
 }
