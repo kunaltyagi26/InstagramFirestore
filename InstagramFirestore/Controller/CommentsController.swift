@@ -16,7 +16,7 @@ class CommentsController: UIViewController {
     
     private let tableView = UITableView()
     
-    var postId: String?
+    var post: Post?
     var comments: [Comment] = []
     
     private lazy var commentInputView: CommentInputAccessoryView = {
@@ -56,8 +56,8 @@ class CommentsController: UIViewController {
     // MARK: - API
     
     func fetchComments() {
-        guard let postId = postId else { return }
-        CommentService.fetchComment(postId: postId) { (result) in
+        guard let post = post else { return }
+        CommentService.fetchComment(postId: post.id) { (result) in
             DispatchQueue.main.async {
                 switch result {
                     case .success(let comments):
@@ -181,15 +181,16 @@ extension CommentsController: UITextFieldDelegate {
 
 extension CommentsController: CommentInputAccessoryViewDelegate {
     func inputView(_ inputView: CommentInputAccessoryView, wantsToUploadComment comment: String) {
-        guard let postId = postId else { return }
+        guard let post = post else { return }
         inputView.clearCommentText()
         let currentUser = User(uid: LoginManager.shared.uid, email: LoginManager.shared.email, username: LoginManager.shared.username, fullName: LoginManager.shared.fullName, profileImageUrl: LoginManager.shared.profileImageUrl)
-        CommentService.uploadComment(comment: comment, postId: postId, user: currentUser) { (error) in
+        CommentService.uploadComment(comment: comment, postId: post.id, user: currentUser) { (error) in
             if let error = error {
                 inputView.commentTextField.text = comment
                 self.showAlert(title: "Error", message: error.localizedDescription)
             } else {
                 inputView.commentTextField.resignFirstResponder()
+                NotificationService.uploadNotification(toUid: post.ownerId, type: .comment, post: post)
             }
         }
     }

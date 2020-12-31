@@ -26,7 +26,11 @@ class NotificationsController: UITableViewController {
         return label
     }()
     
-    var notifications: [Notification] = []
+    var notifications: [Notification] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     // MARK: - Lifecycle
     
@@ -63,11 +67,10 @@ class NotificationsController: UITableViewController {
                             self.tableView.backgroundView = nil
                             self.notifications = notifications
                             self.setBadgeValue(lastNotificationCount: lastNotificationCount, newNotificationCount: notifications.count)
-                            self.tableView.reloadData()
                             self.showFinalizedActivityIndicator(for: NotificationsController.activityIndicator, withMessage: "Success", andTime: 0.5)
                         } else {
                             self.tableView.backgroundView = self.noNotificationsLabel
-                            self.tableView.reloadData()
+                            self.notifications = notifications
                             self.showFinalizedActivityIndicator(for: NotificationsController.activityIndicator, withMessage: "Success", andTime: 0.5)
                         }
                     case .failure(let error):
@@ -125,6 +128,8 @@ class NotificationsController: UITableViewController {
         fetchNotifications()
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension NotificationsController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

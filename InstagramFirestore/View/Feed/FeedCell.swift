@@ -9,7 +9,7 @@ import UIKit
 
 protocol FeedCellDelegate: AnyObject {
     func handleUsernameClicked(ownerId: String?)
-    func handleCommentClicked(postId: String?)
+    func handleCommentClicked(post: Post)
     func handleLikeClicked(for cell: FeedCell, post: Post)
 }
 
@@ -25,9 +25,11 @@ class FeedCell: UICollectionViewCell {
     
     var isSelectedPost: Bool? {
         didSet {
-            if !(isSelectedPost ?? false) {
-                layer.cornerRadius = 30
-                self.applyshadowWithCorner(cornerRadius: 30, shadowRadius: 5, shadowOffset: CGSize(width: 5.0, height: 5.0), shadowOpacity: 0.5)
+            DispatchQueue.main.async {
+                if !(self.isSelectedPost ?? false) {
+                    self.layer.cornerRadius = 30
+                    self.applyshadowWithCorner(cornerRadius: 30, shadowRadius: 5, shadowOffset: CGSize(width: 5.0, height: 5.0), shadowOpacity: 0.5)
+                }
             }
         }
     }
@@ -157,7 +159,8 @@ class FeedCell: UICollectionViewCell {
     }
     
     @objc func didTapComment() {
-        delegate?.handleCommentClicked(postId: viewModel?.postId)
+        guard let viewModel = viewModel else { return }
+        delegate?.handleCommentClicked(post: viewModel.post)
     }
     
     @objc func didTapShare() {
