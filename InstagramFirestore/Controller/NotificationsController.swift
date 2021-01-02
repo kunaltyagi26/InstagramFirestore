@@ -140,6 +140,15 @@ class NotificationsController: UITableViewController {
         self.refreshControl?.beginRefreshing()
         fetchNotifications()
     }
+    
+    func moveToProfile(uid: String) {
+        let profileLayout = UICollectionViewFlowLayout()
+        let profileController = ProfileController(collectionViewLayout: profileLayout)
+        profileController.selectedUserId = uid
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(profileController, animated: true)
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -198,7 +207,23 @@ extension NotificationsController: NotificationCellDelegate {
     }
     
     func cell(_ cell: NotificationCell, wantsToViewPost post: String) {
-        
+        PostService.fetchSelectedPost(postId: post) { (result) in
+            switch result {
+            case .success(let post):
+                let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
+                feedController.selectedPost = post
+                feedController.hidesBottomBarWhenPushed = true
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(feedController, animated: true)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func cell(_ cell: NotificationCell, wantsToViewProfile uid: String) {
+        moveToProfile(uid: uid)
     }
 }
 
@@ -206,12 +231,8 @@ extension NotificationsController: NotificationCellDelegate {
 
 extension NotificationsController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        let profileLayout = UICollectionViewFlowLayout()
-        let profileController = ProfileController(collectionViewLayout: profileLayout)
-        profileController.selectedUserId = URL.absoluteString
-        DispatchQueue.main.async {
-            self.navigationController?.pushViewController(profileController, animated: true)
-        }
+        let selectedUserId = URL.absoluteString
+        moveToProfile(uid: selectedUserId)
         return false
     }
 }

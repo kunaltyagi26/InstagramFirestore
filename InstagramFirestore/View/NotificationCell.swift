@@ -11,6 +11,7 @@ protocol NotificationCellDelegate: AnyObject {
     func cell(_ cell: NotificationCell, wantsToFollow uid: String)
     func cell(_ cell: NotificationCell, wantsToUnfollow uid: String)
     func cell(_ cell: NotificationCell, wantsToViewPost post: String)
+    func cell(_ cell: NotificationCell, wantsToViewProfile uid: String)
 }
 
 class NotificationCell: UITableViewCell {
@@ -31,13 +32,15 @@ class NotificationCell: UITableViewCell {
         return outerView
     }()
     
-    private let profileImageView: UIImageView = {
+    private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .systemGray2
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         iv.layer.cornerRadius = 40 / 2
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped)))
         return iv
     }()
     
@@ -58,10 +61,11 @@ class NotificationCell: UITableViewCell {
         return outerView
     }()
     
-    private let postImageView: UIImageView = {
+    private lazy var postImageView: UIImageView = {
         let postImageView = UIImageView()
         postImageView.contentMode = .scaleAspectFill
         postImageView.clipsToBounds = true
+        postImageView.isUserInteractionEnabled = true
         postImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handlePostTapped)))
         return postImageView
     }()
@@ -96,7 +100,6 @@ class NotificationCell: UITableViewCell {
         contentView.addSubview(infoLabel)
         infoLabel.anchor(top: contentView.topAnchor, bottom: contentView.bottomAnchor, paddingTop: 4, paddingBottom: 0)
         infoLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 46).isActive = true
-        infoLabel.centerY(inView: contentView)
         
         contentView.addSubview(outerProfileImageView)
         outerProfileImageView.centerY(inView: contentView)
@@ -162,13 +165,12 @@ class NotificationCell: UITableViewCell {
     }
     
     @objc func handlePostTapped() {
-        /*let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
-        feedController.selectedPost = posts[indexPath.row]
-        feedController.hidesBottomBarWhenPushed = true
-        DispatchQueue.main.async {
-            self.navigationController?.pushViewController(feedController, animated: true)
-        }*/
         guard let postId = viewModel?.notification.postId else { return }
         delegate?.cell(self, wantsToViewPost: postId)
+    }
+    
+    @objc func handleProfileImageTapped() {
+        guard let viewModel = viewModel else { return }
+        delegate?.cell(self, wantsToViewProfile: viewModel.ownerId)
     }
 }
