@@ -34,6 +34,7 @@ struct Notification {
     let type: NotificationType
     let ownerProfilePicture: String
     let ownerUsername: String
+    var isUserFollowed: Bool?
     
     init(dictionary: [String:Any]) {
         self.id = dictionary["id"] as? String ?? ""

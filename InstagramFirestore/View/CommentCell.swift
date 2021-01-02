@@ -58,13 +58,13 @@ class CommentCell: UITableViewCell {
     // MARK: - Helpers
     
     func setupView() {
-        self.addSubview(commentTextView)
-        commentTextView.anchor(top: topAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 4, paddingRight: 12)
+        contentView.addSubview(commentTextView)
+        commentTextView.anchor(top: contentView.topAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 4, paddingBottom: 4, paddingRight: 12)
         commentTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
         
-        self.addSubview(outerProfileImageView)
+        contentView.addSubview(outerProfileImageView)
         outerProfileImageView.centerY(inView: commentTextView)
-        outerProfileImageView.anchor(left: leftAnchor, right: commentTextView.leftAnchor, paddingLeft: 12, paddingRight: 8, width: 30, height: 30)
+        outerProfileImageView.anchor(left: contentView.leftAnchor, right: commentTextView.leftAnchor, paddingLeft: 12, paddingRight: 8, width: 30, height: 30)
         
         outerProfileImageView.addSubview(profileImageView)
         profileImageView.anchor(top: outerProfileImageView.topAnchor, left: outerProfileImageView.leftAnchor, bottom: outerProfileImageView.bottomAnchor, right: outerProfileImageView.rightAnchor)
@@ -74,10 +74,6 @@ class CommentCell: UITableViewCell {
         guard let viewModel = viewModel else { return }
         self.profileImageView.sd_setImage(with: viewModel.profileImageURL, completed: nil)
         
-        let username = viewModel.username
-        let comment = viewModel.commentText
-        let cellText = username + " " + comment
-        commentTextView.text = cellText
         commentTextView.font = UIFont.systemFont(ofSize: 18)
         commentTextView.attributedText = viewModel.commentLabelText()
         

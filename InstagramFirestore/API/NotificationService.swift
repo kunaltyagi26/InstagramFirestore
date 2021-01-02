@@ -29,19 +29,7 @@ struct NotificationService {
         notificationsCollection.document(uid).collection("user-notifications").document(notificationId).setData(data)
     }
     
-    static func fetchNotifications(completion: @escaping(Result<[Notification], Error>) -> Void) {
-        let currentUser = LoginManager.shared.uid
-        notificationsCollection.document(currentUser).collection("user-notifications").getDocuments { (snapshot, error) in
-            if let snapshot = snapshot {
-                let notifications = snapshot.documents.map { Notification(dictionary: $0.data()) }
-                completion(.success(notifications))
-            } else if let error = error {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    static func fetchNotifications2(completion: @escaping(Result<[Notification], Error>)-> Void) {
+    static func fetchNotifications(completion: @escaping(Result<[Notification], Error>)-> Void) {
         let currentUser = LoginManager.shared.uid
         var notifications: [Notification] = []
         let query = notificationsCollection.document(currentUser).collection("user-notifications").order(by: "timestamp", descending: false)

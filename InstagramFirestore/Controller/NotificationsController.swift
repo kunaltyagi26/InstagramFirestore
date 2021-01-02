@@ -55,7 +55,7 @@ class NotificationsController: UITableViewController {
     
     func fetchNotifications() {
         NotificationsController.activityIndicator = self.showActivityIndicator()
-        NotificationService.fetchNotifications2 { result in
+        NotificationService.fetchNotifications { result in
             DispatchQueue.main.async {
                 if let refreshControl = self.refreshControl, refreshControl.isRefreshing {
                     self.refreshControl?.endRefreshing()
@@ -66,6 +66,7 @@ class NotificationsController: UITableViewController {
                         if notifications.count > 0 {
                             self.tableView.backgroundView = nil
                             self.notifications = notifications
+                            self.checkIfUserIsFollowed()
                             self.setBadgeValue(lastNotificationCount: lastNotificationCount, newNotificationCount: notifications.count)
                             self.showFinalizedActivityIndicator(for: NotificationsController.activityIndicator, withMessage: "Success", andTime: 0.5)
                         } else {
@@ -82,11 +83,23 @@ class NotificationsController: UITableViewController {
         }
     }
     
+    func checkIfUserIsFollowed() {
+        self.notifications.forEach { (notification) in
+            guard notification.type == .follow else { return }
+            UserService.checkIfUserIsFollowed(uid: notification.uid) { (isFollowed) in
+                if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
+                    self.notifications[index].isUserFollowed = isFollowed
+                }
+            }
+        }
+    }
+    
     // MARK: - Helpers
     
     func configureTableView() {
         self.navigationItem.title = "Notifications"
         self.view.backgroundColor = UIColor(named: "background")
+        self.navigationItem.backButtonTitle = ""
         
         tableView.register(NotificationCell.self, forCellReuseIdentifier: resuseIdentifier)
         tableView.estimatedRowHeight = 70
@@ -132,14 +145,73 @@ class NotificationsController: UITableViewController {
 // MARK: - UITableViewDataSource
 
 extension NotificationsController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return notifications.count
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: resuseIdentifier) as? NotificationCell else { return UITableViewCell() }
         cell.backgroundColor = .clear
-        cell.viewModel = NotificationViewModel(notification: notifications[indexPath.row])
+        cell.viewModel = NotificationViewModel(notification: notifications[indexPath.section])
+        cell.delegate = self
+        cell.infoLabel.delegate = self
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = view.backgroundColor
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+}
+
+// MARK: - NotificationCellDelegate
+
+extension NotificationsController: NotificationCellDelegate {
+    func cell(_ cell: NotificationCell, wantsToFollow uid: String) {
+        UserService.followUser(uid: uid) { (error) in
+            if let error = error {
+                print(error)
+            } else {
+                cell.viewModel?.isUserFollowed = true
+                NotificationService.uploadNotification(toUid: uid, type: .follow)
+            }
+        }
+    }
+    
+    func cell(_ cell: NotificationCell, wantsToUnfollow uid: String) {
+        UserService.unfollowUser(uid: uid) { (error) in
+            if let error = error {
+                print(error)
+            } else {
+                cell.viewModel?.isUserFollowed = false
+            }
+        }
+    }
+    
+    func cell(_ cell: NotificationCell, wantsToViewPost post: String) {
+        
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension NotificationsController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        let profileLayout = UICollectionViewFlowLayout()
+        let profileController = ProfileController(collectionViewLayout: profileLayout)
+        profileController.selectedUserId = URL.absoluteString
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(profileController, animated: true)
+        }
+        return false
     }
 }

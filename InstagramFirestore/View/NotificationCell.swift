@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol NotificationCellDelegate: AnyObject {
+    func cell(_ cell: NotificationCell, wantsToFollow uid: String)
+    func cell(_ cell: NotificationCell, wantsToUnfollow uid: String)
+    func cell(_ cell: NotificationCell, wantsToViewPost post: String)
+}
+
 class NotificationCell: UITableViewCell {
     
     // MARK: - Properties
@@ -16,6 +22,8 @@ class NotificationCell: UITableViewCell {
             configureView()
         }
     }
+    
+    weak var delegate: NotificationCellDelegate?
     
     private let outerProfileImageView: UIView = {
         let outerView = UIView()
@@ -33,7 +41,7 @@ class NotificationCell: UITableViewCell {
         return iv
     }()
     
-    private let infoLabel: UITextView = {
+    let infoLabel: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .clear
         textView.isUserInteractionEnabled = true
@@ -58,16 +66,16 @@ class NotificationCell: UITableViewCell {
         return postImageView
     }()
     
-    private let followButton: UIButton = {
+    private lazy var followButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Follow", for: .normal)
+        button.setTitle("Loading", for: .normal)
         button.backgroundColor = UIColor(named: "background")
         button.tintColor = .label
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.label.withAlphaComponent(0.3).cgColor
         button.applyshadowWithCorner(cornerRadius: 6, shadowRadius: 3, shadowOffset: CGSize(width: 0.0, height: 0.0), shadowOpacity: 0.5)
-        button.addTarget(self, action: #selector(handleFollowTapped), for: .touchUpInside )
+        button.addTarget(self, action: #selector(handleFollowTapped), for: .touchUpInside)
         return button 
     }()
     
@@ -85,51 +93,82 @@ class NotificationCell: UITableViewCell {
     // MARK: - Helpers
     
     func setupView() {
-        self.addSubview(infoLabel)
-        infoLabel.anchor(top: topAnchor, bottom: bottomAnchor, paddingTop: 8, paddingBottom: 8)
-        infoLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
+        contentView.addSubview(infoLabel)
+        infoLabel.anchor(top: contentView.topAnchor, bottom: contentView.bottomAnchor, paddingTop: 4, paddingBottom: 0)
+        infoLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 46).isActive = true
+        infoLabel.centerY(inView: contentView)
         
-        self.addSubview(outerProfileImageView)
-        outerProfileImageView.centerY(inView: infoLabel)
-        outerProfileImageView.anchor(left: leftAnchor, right: infoLabel.leftAnchor, paddingLeft: 8, paddingRight: 12, width: 40, height: 40)
+        contentView.addSubview(outerProfileImageView)
+        outerProfileImageView.centerY(inView: contentView)
+        outerProfileImageView.anchor(left: contentView.leftAnchor, right: infoLabel.leftAnchor, paddingLeft: 8, paddingRight: 12, width: 40, height: 40)
         
         outerProfileImageView.addSubview(profileImageView)
         profileImageView.anchor(top: outerProfileImageView.topAnchor, left: outerProfileImageView.leftAnchor, bottom: outerProfileImageView.bottomAnchor, right: outerProfileImageView.rightAnchor)
-        
-        addSubview(followButton)
-        followButton.centerY(inView: infoLabel)
-        followButton.anchor(left: infoLabel.rightAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 12, width: 70, height: 24)
-        
-        addSubview(postImageOuterView)
-        postImageOuterView.centerY(inView: infoLabel)
-        postImageOuterView.anchor(left: infoLabel.rightAnchor, right: rightAnchor, paddingLeft: 12, paddingRight: 12, width: 40, height: 40)
-        
-        addSubview(postImageView)
-        postImageOuterView.addSubview(postImageView)
-        postImageView.anchor(top: postImageOuterView.topAnchor, left: postImageOuterView.leftAnchor, bottom: postImageOuterView.bottomAnchor, right: postImageOuterView.rightAnchor)
-        
-        followButton.isHidden = true
     }
     
     func configureView() {
+        selectionStyle = .none
         guard let viewModel = viewModel else { return }
         profileImageView.sd_setImage(with: viewModel.ownerProfilePicture, completed: nil)
         infoLabel.attributedText = viewModel.notificationLabelText()
         self.infoLabel.linkTextAttributes = [
             .foregroundColor: UIColor.label
         ]
-        if let postImageUrl = viewModel.postImageUrl {
+        if let postImageUrl = viewModel.postImageUrl, postImageUrl.absoluteString != "" {
+            contentView.addSubview(postImageOuterView)
+            postImageOuterView.centerY(inView: contentView)
+            postImageOuterView.anchor(left: infoLabel.rightAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 12, width: 40, height: 40)
+            
+            postImageOuterView.addSubview(postImageView)
+            postImageView.anchor(top: postImageOuterView.topAnchor, left: postImageOuterView.leftAnchor, bottom: postImageOuterView.bottomAnchor, right: postImageOuterView.rightAnchor)
+            
+            postImageView.isHidden = false
+            postImageOuterView.isHidden = false
+            followButton.isHidden = true
             postImageView.sd_setImage(with: postImageUrl, completed: nil)
+        } else {
+            contentView.addSubview(followButton)
+            followButton.centerY(inView: infoLabel, constant: -4)
+            followButton.anchor(left: infoLabel.rightAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 12, height: 24)
+            let followButtonWidthConstraint = followButton.widthAnchor.constraint(equalToConstant: 80)
+            followButtonWidthConstraint.isActive = true
+            
+            followButton.isHidden = false
+            postImageView.isHidden = true
+            postImageOuterView.isHidden = true
+            
+            self.followButton.backgroundColor = .systemBlue
+            self.followButton.setTitleColor(.systemBackground, for: .normal)
+            
+            if let isUserFollowed = viewModel.isUserFollowed {
+                if isUserFollowed {
+                    self.followButton.setTitle("Following", for: .normal)
+                } else {
+                    self.followButton.setTitle("Follow", for: .normal)
+                }
+            }
         }
     }
     
     // MARK: - Actions
     
     @objc func handleFollowTapped() {
-        
+        guard let viewModel = viewModel, let isUserFollowed = viewModel.isUserFollowed else { return }
+        if isUserFollowed {
+            delegate?.cell(self, wantsToUnfollow: viewModel.ownerId)
+        } else {
+            delegate?.cell(self, wantsToFollow: viewModel.ownerId)
+        }
     }
     
     @objc func handlePostTapped() {
-        
+        /*let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
+        feedController.selectedPost = posts[indexPath.row]
+        feedController.hidesBottomBarWhenPushed = true
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(feedController, animated: true)
+        }*/
+        guard let postId = viewModel?.notification.postId else { return }
+        delegate?.cell(self, wantsToViewPost: postId)
     }
 }

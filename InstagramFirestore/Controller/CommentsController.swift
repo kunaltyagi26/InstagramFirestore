@@ -152,9 +152,11 @@ extension CommentsController: UITableViewDelegate {
 
 extension CommentsController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        print("came in this method.")
-        if (URL.absoluteString == "https://www.apple.com") {
-            UIApplication.shared.open(URL, options: [:], completionHandler: nil)
+        let profileLayout = UICollectionViewFlowLayout()
+        let profileController = ProfileController(collectionViewLayout: profileLayout)
+        profileController.selectedUserId = URL.absoluteString
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(profileController, animated: true)
         }
         return false
     }

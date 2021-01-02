@@ -239,6 +239,7 @@ extension ProfileController: ProfileHeaderDelegate {
                         print(error)
                     } else {
                         self.user?.isFollowed = true
+                        NotificationService.uploadNotification(toUid: user.uid, type: .follow)
                         self.getData()
                     }
                 }
