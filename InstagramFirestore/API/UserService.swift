@@ -89,7 +89,7 @@ struct UserService {
         }
     }
     
-    static func getFollowers(uid: String, completion: @escaping([String]?, Error?)-> Void) {
+    static func getFollowings(uid: String, completion: @escaping([String]?, Error?)-> Void) {
         followingCollection.document(uid).collection("user-following").getDocuments { (snapshot, error) in
             if let snapshot = snapshot {
                 let followers = snapshot.documents.reduce([], { (result, snapshot) in
@@ -98,6 +98,53 @@ struct UserService {
                 completion(followers, nil)
             } else {
                 completion(nil, error)
+            }
+        }
+    }
+    
+    static func getFollowers(uid: String, completion: @escaping([String]?, Error?)-> Void) {
+        followersCollection.document(uid).collection("user-followers").getDocuments { (snapshot, error) in
+            if let snapshot = snapshot {
+                let followers = snapshot.documents.reduce([], { (result, snapshot) in
+                    result + [snapshot.documentID]
+                })
+                completion(followers, nil)
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
+    
+    static func fetchFollowers(for uid: String, completion: @escaping(Result<[User], Error>)-> Void) {
+        UserService.getFollowers(uid: uid) { (followers, error) in
+            if let followers = followers {
+                usersCollection.whereField("uid", in: followers).getDocuments { (snapshot, error) in
+                    if let snapshot = snapshot {
+                        let users = snapshot.documents.map { User(dictionary: $0.data()) }
+                        completion(.success(users))
+                    } else if let error = error {
+                        completion(.failure(error))
+                    }
+                }
+            } else if let error = error {
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    static func fetchFollowings(for uid: String, completion: @escaping(Result<[User], Error>)-> Void) {
+        UserService.getFollowings(uid: uid) { (followers, error) in
+            if let followers = followers {
+                usersCollection.whereField("uid", in: followers).getDocuments { (snapshot, error) in
+                    if let snapshot = snapshot {
+                        let users = snapshot.documents.map { User(dictionary: $0.data()) }
+                        completion(.success(users))
+                    } else if let error = error {
+                        completion(.failure(error))
+                    }
+                }
+            } else if let error = error {
+                completion(.failure(error))
             }
         }
     }

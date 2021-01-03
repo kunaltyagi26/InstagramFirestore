@@ -107,11 +107,7 @@ class RegistrationController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.barStyle = .black
         
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemIndigo.cgColor, UIColor.systemPurple.cgColor, UIColor.systemRed.cgColor]
-        gradient.locations = [0, 0.4, 0.8]
-        view.layer.addSublayer(gradient)
-        gradient.frame = view.frame
+        self.configureGradientLayer()
         
         view.addSubview(addProfilePhotoButton)
         addProfilePhotoButton.centerX(inView: view)

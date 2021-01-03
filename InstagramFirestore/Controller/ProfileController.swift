@@ -13,7 +13,7 @@ import Firebase
 // MARK: - Reuse-Identifiers
 
 private let profileHeaderCellReuseIdentifier = "profileHeaderCell"
-private let profileCellReuseIdentifier = "profileCell"
+let profileCellReuseIdentifier = "profileCell"
 
 class ProfileController: UICollectionViewController {
     
@@ -253,6 +253,24 @@ extension ProfileController: ProfileHeaderDelegate {
                     }
                 }
             }
+        }
+    }
+    
+    func header(_ profileHeader: ProfileHeader, wantsToShowFollowersFor userId: String) {
+        let searchController = SearchController()
+        searchController.selectedUserId = userId
+        searchController.searchControllerView = SearchControllerView.followers
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(searchController, animated: true)
+        }
+    }
+    
+    func header(_ profileHeader: ProfileHeader, wantsToShowFollowingsFor userId: String) {
+        let searchController = SearchController()
+        searchController.selectedUserId = userId
+        searchController.searchControllerView = SearchControllerView.followings
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(searchController, animated: true)
         }
     }
 }

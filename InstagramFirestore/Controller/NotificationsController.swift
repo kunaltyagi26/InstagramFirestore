@@ -186,7 +186,9 @@ extension NotificationsController {
 
 extension NotificationsController: NotificationCellDelegate {
     func cell(_ cell: NotificationCell, wantsToFollow uid: String) {
+        NotificationsController.activityIndicator = self.showActivityIndicator()
         UserService.followUser(uid: uid) { (error) in
+            self.hideActivityIndicator(for: NotificationsController.activityIndicator)
             if let error = error {
                 print(error)
             } else {
@@ -197,7 +199,9 @@ extension NotificationsController: NotificationCellDelegate {
     }
     
     func cell(_ cell: NotificationCell, wantsToUnfollow uid: String) {
+        NotificationsController.activityIndicator = self.showActivityIndicator()
         UserService.unfollowUser(uid: uid) { (error) in
+            self.hideActivityIndicator(for: NotificationsController.activityIndicator)
             if let error = error {
                 print(error)
             } else {
@@ -207,7 +211,9 @@ extension NotificationsController: NotificationCellDelegate {
     }
     
     func cell(_ cell: NotificationCell, wantsToViewPost post: String) {
+        NotificationsController.activityIndicator = self.showActivityIndicator()
         PostService.fetchSelectedPost(postId: post) { (result) in
+            self.hideActivityIndicator(for: NotificationsController.activityIndicator)
             switch result {
             case .success(let post):
                 let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())

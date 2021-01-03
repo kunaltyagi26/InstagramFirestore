@@ -28,7 +28,6 @@ extension UIViewController {
         hud.textLabel.text = "Loading"
         hud.shadow = JGProgressHUDShadow(color: .label, offset: .zero, radius: 10.0, opacity: 0.2)
         hud.animation = JGProgressHUDFadeZoomAnimation()
-        //hud.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         hud.show(in: self.tabBarController?.view ?? self.view)
         return hud
     }
@@ -42,6 +41,10 @@ extension UIViewController {
             indicator.textLabel.text = error
         }
         indicator.dismiss(afterDelay: time, animated: true)
+    }
+    
+    func hideActivityIndicator(for indicator: JGProgressHUD) {
+        indicator.dismiss()
     }
     
     func showLogoutButton() {
@@ -114,5 +117,13 @@ extension UIViewController {
         }
         
         return errorMessage
+    }
+    
+    func configureGradientLayer() {
+        let gradient = CAGradientLayer()
+        gradient.colors = [UIColor.systemIndigo.cgColor, UIColor.systemPurple.cgColor, UIColor.systemRed.cgColor]
+        gradient.locations = [0, 0.4, 0.8]
+        view.layer.addSublayer(gradient)
+        gradient.frame = view.frame
     }
 }

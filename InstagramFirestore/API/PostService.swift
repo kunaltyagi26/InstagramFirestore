@@ -33,7 +33,7 @@ struct PostService {
     
     static func fetchFeedPosts(completion: @escaping(Result<[Post], Error>) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        UserService.getFollowers(uid: uid) { (followers, error)  in
+        UserService.getFollowings(uid: uid) { (followers, error)  in
             if let followers = followers {
                 var posts: [Post] = []
                 if followers.count > 0 {
@@ -101,6 +101,17 @@ struct PostService {
             if let snapshot = snapshot, snapshot.exists, let data = snapshot.data() {
                 let post = Post(postId: snapshot.documentID, dictionary: data)
                 completion(.success(post))
+            } else if let error = error {
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    static func fetchAllPosts(completion: @escaping(Result<[Post], Error>)-> Void) {
+        postsCollection.order(by: "timestamp", descending: true).getDocuments { (snapshot, error) in
+            if let snapshot = snapshot {
+                let posts = snapshot.documents.map { Post(postId: $0.documentID, dictionary: $0.data()) }
+                completion(.success(posts))
             } else if let error = error {
                 completion(.failure(error))
             }

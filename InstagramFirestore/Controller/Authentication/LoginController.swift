@@ -53,7 +53,7 @@ class LoginController: UIViewController {
     private let forgotPasswordButton: UIButton = {
         let button = UIButton(type: .system)
         button.attributedTitle(firstPart: "Forgot your password? ", secondPart: "Get help signing in.")
-        button.addTarget(self, action: #selector(didTapSignUp), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
         return button
     }()
     
@@ -72,18 +72,26 @@ class LoginController: UIViewController {
         configureNotificationObservers()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = false
+    }
+    
     // MARK: - Helpers
     
     func configureUI() {
         view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.isHidden = true
+        self.navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.barStyle = .black
         
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemIndigo.cgColor, UIColor.systemPurple.cgColor, UIColor.systemRed.cgColor]
-        gradient.locations = [0, 0.4, 0.8]
-        view.layer.addSublayer(gradient)
-        gradient.frame = view.frame
+        self.configureGradientLayer()
         
         view.addSubview(iconImage)
         iconImage.centerX(inView: view)
@@ -159,6 +167,13 @@ class LoginController: UIViewController {
             }
         }
     }
+    
+    @objc func didTapForgotPassword() {
+        let resetPasswordController = ResetPasswordController()
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(resetPasswordController, animated: true)
+        }
+    }
 }
 
 // MARK: - FormViewModel Extension
@@ -170,3 +185,4 @@ extension LoginController: FormViewModel {
         loginButton.isUserInteractionEnabled = viewModel.isFormValid
     }
 }
+

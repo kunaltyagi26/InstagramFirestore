@@ -11,6 +11,8 @@ import FirebaseAuth
 
 protocol ProfileHeaderDelegate: class {
     func header(_ profileHeader: ProfileHeader, didTapActionButtonFor user: User)
+    func header(_ profileHeader: ProfileHeader, wantsToShowFollowersFor userId: String)
+    func header(_ profileHeader: ProfileHeader, wantsToShowFollowingsFor userId: String)
 }
 
 class ProfileHeader: UICollectionReusableView {
@@ -200,11 +202,17 @@ class ProfileHeader: UICollectionReusableView {
         followersStackView.axis = .vertical
         followersStackView.distribution = .fillEqually
         followersStackView.spacing = 8
+        followersStackView.isUserInteractionEnabled = true
+        let followersTap = UITapGestureRecognizer(target: self, action: #selector(showFollowers))
+        followersStackView.addGestureRecognizer(followersTap)
         
         followingStackView = UIStackView(arrangedSubviews: [followingLabel, followingStringLabel])
         followingStackView.axis = .vertical
         followingStackView.distribution = .fillEqually
         followingStackView.spacing = 8
+        followingStackView.isUserInteractionEnabled = true
+        let followingTap = UITapGestureRecognizer(target: self, action: #selector(showFollowings))
+        followingStackView.addGestureRecognizer(followingTap)
         
         stackView = UIStackView(arrangedSubviews: [postsStackView, followersStackView, followingStackView])
         stackView.axis = .horizontal
@@ -288,5 +296,15 @@ class ProfileHeader: UICollectionReusableView {
     
     @objc func didTapBookmark(sender: UIButton) {
         highlightButton(selectedButton: sender)
+    }
+    
+    @objc func showFollowers() {
+        guard let viewModel = viewModel else { return }
+        delegate?.header(self, wantsToShowFollowersFor: viewModel.uid)
+    }
+    
+    @objc func showFollowings() {
+        guard let viewModel = viewModel else { return }
+        delegate?.header(self, wantsToShowFollowingsFor: viewModel.uid)
     }
 }

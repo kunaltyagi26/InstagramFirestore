@@ -88,4 +88,8 @@ struct AuthService {
             completion(.failure(error))
         }
     }
+    
+    static func sendPasswordResetEmail(withEmail email: String, completion: @escaping(FirebaseCompletion)) {
+        Auth.auth().sendPasswordReset(withEmail: email, completion: completion)
+    }
 }

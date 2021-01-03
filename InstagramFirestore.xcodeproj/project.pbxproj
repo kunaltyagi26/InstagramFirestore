@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B6D812A25A0DFEE003DF1F9 /* ResetPasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6D812925A0DFEE003DF1F9 /* ResetPasswordController.swift */; };
 		2B72FBA0257FE9E600D64C4B /* UploadPostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FB9F257FE9E600D64C4B /* UploadPostController.swift */; };
 		2B72FBA3257FF6A100D64C4B /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBA2257FF6A100D64C4B /* CustomTextView.swift */; };
 		2B72FBA62581442200D64C4B /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72FBA52581442200D64C4B /* PostService.swift */; };
@@ -62,6 +63,7 @@
 
 /* Begin PBXFileReference section */
 		0B1CE894AEBB94F4EBDB0F7F /* Pods-InstagramFirestore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstagramFirestore.debug.xcconfig"; path = "Target Support Files/Pods-InstagramFirestore/Pods-InstagramFirestore.debug.xcconfig"; sourceTree = "<group>"; };
+		2B6D812925A0DFEE003DF1F9 /* ResetPasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordController.swift; sourceTree = "<group>"; };
 		2B72FB9F257FE9E600D64C4B /* UploadPostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostController.swift; sourceTree = "<group>"; };
 		2B72FBA2257FF6A100D64C4B /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		2B72FBA52581442200D64C4B /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			children = (
 				2B7608FC256A39820007C579 /* LoginController.swift */,
 				2B7608FF256A39900007C579 /* RegistrationController.swift */,
+				2B6D812925A0DFEE003DF1F9 /* ResetPasswordController.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 			files = (
 				2BB6C9282571701D00292090 /* AuthErrorCode + Extensions.swift in Sources */,
 				2B7608E62568F27D0007C579 /* ImageSelectorController.swift in Sources */,
+				2B6D812A25A0DFEE003DF1F9 /* ResetPasswordController.swift in Sources */,
 				2B760903256A44990007C579 /* UITextField + Extensions.swift in Sources */,
 				2BB6C92B2572403800292090 /* ProfileCell.swift in Sources */,
 				2BAE3ADF259893350019D4A8 /* NSMutableAttributedString + Extensions.swift in Sources */,

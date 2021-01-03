@@ -112,3 +112,34 @@ struct RegistrationViewModel: AuthenticationViewModel {
         }
     }
 }
+
+struct ResetPasswordViewModel: AuthenticationViewModel {
+    var email: String?
+    
+    var isFormValid: Bool {
+        return email?.isEmpty == false
+    }
+    
+    var buttonBackgroundColor: UIColor {
+        return isFormValid ? (UIColor(named: "loginButtonColor") ?? UIColor.systemBackground) : (UIColor(named: "loginButtonDisabledColor") ?? UIColor.systemBackground)
+    }
+    
+    var buttonTitleColor: UIColor {
+        return isFormValid ? UIColor.systemBackground.withAlphaComponent(0.7) : UIColor.systemBackground.withAlphaComponent(0.4)
+    }
+    
+    func resetPassword(completion: @escaping (Result<Bool, Error>)-> Void) {
+        if let email = email {
+            let emailValue = email.trimmingCharacters(in: .whitespacesAndNewlines)
+            if emailValue != "" {
+                AuthService.sendPasswordResetEmail(withEmail: emailValue) { (error) in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(true))
+                    }
+                }
+            }
+        }
+    }
+}
