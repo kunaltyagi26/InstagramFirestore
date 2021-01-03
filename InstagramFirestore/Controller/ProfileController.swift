@@ -260,6 +260,7 @@ extension ProfileController: ProfileHeaderDelegate {
         let searchController = SearchController()
         searchController.selectedUserId = userId
         searchController.searchControllerView = SearchControllerView.followers
+        searchController.hidesBottomBarWhenPushed = true
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(searchController, animated: true)
         }
@@ -269,6 +270,7 @@ extension ProfileController: ProfileHeaderDelegate {
         let searchController = SearchController()
         searchController.selectedUserId = userId
         searchController.searchControllerView = SearchControllerView.followings
+        searchController.hidesBottomBarWhenPushed = true
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(searchController, animated: true)
         }

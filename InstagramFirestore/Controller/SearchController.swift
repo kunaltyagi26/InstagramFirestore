@@ -142,16 +142,28 @@ class SearchController: UIViewController {
             if let searchControllerView = searchControllerView, searchControllerView.rawValue == 0 {
                 self.navigationItem.title = "Followers"
                 UserService.fetchFollowers(for: selectedUserId) { (result) in
+                    if self.usersRefreshControl.isRefreshing {
+                        self.usersRefreshControl.endRefreshing()
+                    }
                     self.populateUsers(result: result)
                 }
             } else if searchControllerView?.rawValue == 1 {
                 self.navigationItem.title = "Followings"
                 UserService.fetchFollowings(for: selectedUserId) { (result) in
+                    if self.usersRefreshControl.isRefreshing {
+                        self.usersRefreshControl.endRefreshing()
+                    }
                     self.populateUsers(result: result)
                 }
             }
         } else {
+            if collectionView.isHidden {
+                SearchController.activityIndicator = self.showActivityIndicator()
+            }
             UserService.fetchUsers { (result) in
+                if self.usersRefreshControl.isRefreshing {
+                    self.usersRefreshControl.endRefreshing()
+                }
                 self.populateUsers(result: result)
             }
         }
@@ -161,6 +173,9 @@ class SearchController: UIViewController {
         SearchController.activityIndicator = self.showActivityIndicator()
         PostService.fetchAllPosts { (result) in
             DispatchQueue.main.async {
+                if self.postsRefreshControl.isRefreshing {
+                    self.postsRefreshControl.endRefreshing()
+                }
                 switch result {
                 case .success(let posts):
                     self.posts = posts
@@ -201,16 +216,12 @@ class SearchController: UIViewController {
     
     @objc func reloadPosts() {
         self.postsRefreshControl.beginRefreshing()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.postsRefreshControl.endRefreshing()
-        }
+        self.fetchPosts()
     }
     
     @objc func reloadUsers() {
         self.usersRefreshControl.beginRefreshing()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.usersRefreshControl.endRefreshing()
-        }
+        self.fetchUsers()
     }
 }
 
